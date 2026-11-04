@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{0a5289eb-d777-42d7-8db3-1fde687c2215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application">
+      <UniqueIdentifier>{b3cf2d2b-f80f-41d7-a8c3-30b5227de7d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain">
+      <UniqueIdentifier>{235886f8-b633-4641-865d-5e91e15c58c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services">
+      <UniqueIdentifier>{2ca38477-ff02-458c-86be-67f401bbc708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application\heaterTask">
+      <UniqueIdentifier>{79702ab2-ab0e-48da-bd1a-90ab505d85e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application\rtos_resources">
+      <UniqueIdentifier>{475c84b8-d84d-4e19-97bb-73846f9dbbf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application\tempCtrlTask">
+      <UniqueIdentifier>{45a27c0c-354b-4499-b9fb-e85f8a4319aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application\tempTask">
+      <UniqueIdentifier>{2849c052-2912-45f8-975f-d593dfbfc974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\ctrlTemper">
+      <UniqueIdentifier>{556b2200-c9d1-4835-8d18-9dbe9c6f85bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services\config">
+      <UniqueIdentifier>{2e3a4f03-26c8-4d8c-a236-56ae3af854a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services\temperature">
+      <UniqueIdentifier>{21639606-8a41-4d88-a9e7-4fbd2ecbe6b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreeRTOS Source">
+      <UniqueIdentifier>{e1365966-7c9e-4832-b1de-e7903d1f91a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreeRTOS Source\Include">
+      <UniqueIdentifier>{20b54f6a-af02-429a-9b25-5422e680005a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreeRTOS Source\Source">
+      <UniqueIdentifier>{874aa17a-6c1f-44cf-a65d-9be7db5d0359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface">
+      <UniqueIdentifier>{426199fa-1fcf-421f-9d93-70a54846b790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface\sensor">
+      <UniqueIdentifier>{cd00fdb3-3a92-4713-bd39-58c6b1d71ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface\sensor\temperature_sensor_if">
+      <UniqueIdentifier>{c3cf57d7-be27-4a93-9494-6b1802cd687f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services\logger">
+      <UniqueIdentifier>{8088f449-effc-4907-a7eb-a93ec7758a6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface\logger_if">
+      <UniqueIdentifier>{540c8c0b-3c28-46ce-be11-7763b445408d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application\loggerTask">
+      <UniqueIdentifier>{4c38e666-96ba-49cb-9ab0-7b00414ce4ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services\timeService">
+      <UniqueIdentifier>{44c20998-d393-4194-955d-9183b32c8502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface\time_if">
+      <UniqueIdentifier>{2c1f8524-035e-4caa-b8cb-ef4c6db97e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\infrastructure">
+      <UniqueIdentifier>{b3771c0e-231b-4fa4-9bca-e6de37b51777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\infrastructure\sensor">
+      <UniqueIdentifier>{c010f433-94ec-4d12-864d-20ecd128dfcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\infrastructure\sensor\temperatureSim">
+      <UniqueIdentifier>{7a4b0403-d542-48f2-ac30-041a8e5a5006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\infrastructure\logger_file">
+      <UniqueIdentifier>{5e593170-cae6-4ec1-b8d2-80ae07b2a22c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\infrastructure\timeSim">
+      <UniqueIdentifier>{4c9061a3-8a5e-488e-896d-5b1d14316704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services\heater">
+      <UniqueIdentifier>{c9d5de15-474c-44b7-9034-b5caf8504628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface\heater_if">
+      <UniqueIdentifier>{4f47d1fe-7892-4347-8691-3772661f03e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure">
+      <UniqueIdentifier>{131ed6cc-86fe-47a9-82af-9b6357df0c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure\sensor">
+      <UniqueIdentifier>{791ba6df-cd57-4671-bbfc-c7f45ac032db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure\sensor\temperatureSim">
+      <UniqueIdentifier>{86ae1b7d-741e-447c-aab1-de29485a6731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure\logger_file">
+      <UniqueIdentifier>{b7c49e77-a5e7-47ad-8e21-292713105ac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure\timeSim">
+      <UniqueIdentifier>{544b72e5-7b9e-4696-b86e-ad23bd7248f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\domain\PID">
+      <UniqueIdentifier>{cbade5e3-f94d-4906-ae4b-eb1b551eae18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\application\plantTask">
+      <UniqueIdentifier>{95e95dea-2050-4549-b6f8-5d0e85135a51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\services\plant">
+      <UniqueIdentifier>{b044f2a3-3a1f-4bcb-9f85-59b56f87fc98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\interface\config_if">
+      <UniqueIdentifier>{03687aed-3dcc-46fa-aa89-a359ef30424d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure\config_file">
+      <UniqueIdentifier>{370b1f59-e389-4c21-b416-f9ead51bc577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\infrastructure\interpolation">
+      <UniqueIdentifier>{a433b0f9-45fd-4d86-841e-fdb11232c3be}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\domain\ctrlTemper\ctrlTemper.c">
+      <Filter>app\domain\ctrlTemper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\tempCtrlTask\tempCtrlTask.c">
+      <Filter>app\application\tempCtrlTask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\rtos_resources\rtos_resources.c">
+      <Filter>app\application\rtos_resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\services\config\config.c">
+      <Filter>app\services\config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\services\temperature\temperature.c">
+      <Filter>app\services\temperature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\tempTask\tempTask.c">
+      <Filter>app\application\tempTask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\services\logger\logger.c">
+      <Filter>app\services\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\loggerTask\loggerTask.c">
+      <Filter>app\application\loggerTask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\services\timeService\timeService.c">
+      <Filter>app\services\timeService</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\services\heater\heater.c">
+      <Filter>app\services\heater</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\heaterTask\heaterTask.c">
+      <Filter>app\application\heaterTask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\infrastructure\sensor\temperatureSim\temperatureSim.c">
+      <Filter>app\infrastructure\sensor\temperatureSim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\infrastructure\logger_file\logger_file.c">
+      <Filter>app\infrastructure\logger_file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\infrastructure\timeSim\timeSim.c">
+      <Filter>app\infrastructure\timeSim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\domain\PID\PID.c">
+      <Filter>app\domain\PID</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\plantTask\plantTask.c">
+      <Filter>app\application\plantTask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\services\plant\plant.c">
+      <Filter>app\services\plant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\infrastructure\config_file\config_file.c">
+      <Filter>app\infrastructure\config_file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\infrastructure\interpolation\interpolation.c">
+      <Filter>app\infrastructure\interpolation</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\croutine.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\event_groups.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\list.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\portable\MemMang\heap_4.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\portable\MSVC-MingW\port.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\queue.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\stream_buffer.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\tasks.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="FREERTOS_PATH\timers.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\firmware\app\domain\ctrlTemper\ctrlTemper.h">
+      <Filter>app\domain\ctrlTemper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\tempCtrlTask\tempCtrlTask.h">
+      <Filter>app\application\tempCtrlTask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\rtos_resources\rtos_resources.h">
+      <Filter>app\application\rtos_resources</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOSConfig.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\services\config\config.h">
+      <Filter>app\services\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\services\temperature\temperature.h">
+      <Filter>app\services\temperature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\interface\sensor\temperature_sensor_if\temperature_sensor_if.h">
+      <Filter>app\interface\sensor\temperature_sensor_if</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\tempTask\tempTask.h">
+      <Filter>app\application\tempTask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\services\logger\logger.h">
+      <Filter>app\services\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\interface\logger_if\logger_if.h">
+      <Filter>app\interface\logger_if</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\loggerTask\loggerTask.h">
+      <Filter>app\application\loggerTask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\services\timeService\timeService.h">
+      <Filter>app\services\timeService</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\interface\time_if\time_if.h">
+      <Filter>app\interface\time_if</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\services\heater\heater.h">
+      <Filter>app\services\heater</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\interface\heater_if\heater_if.h">
+      <Filter>app\interface\heater_if</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\heaterTask\heaterTask.h">
+      <Filter>app\application\heaterTask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\infrastructure\sensor\temperatureSim\temperatureSim.h">
+      <Filter>app\infrastructure\sensor\temperatureSim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\infrastructure\logger_file\logger_file.h">
+      <Filter>app\infrastructure\logger_file</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\infrastructure\timeSim\timeSim.h">
+      <Filter>app\infrastructure\timeSim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\domain\PID\PID.h">
+      <Filter>app\domain\PID</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\plantTask\plantTask.h">
+      <Filter>app\application\plantTask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\services\plant\plant.h">
+      <Filter>app\services\plant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\interface\config_if\config_if.h">
+      <Filter>app\interface\config_if</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\infrastructure\config_file\config_file.h">
+      <Filter>app\infrastructure\config_file</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\infrastructure\interpolation\interpolation.h">
+      <Filter>app\infrastructure\interpolation</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\croutine.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\event_groups.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\FreeRTOS.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\list.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\message_buffer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\portable.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\projdefs.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\queue.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\semphr.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\stream_buffer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\task.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="FREERTOS_PATH\include\timers.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

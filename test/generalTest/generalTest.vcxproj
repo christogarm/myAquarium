@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{3b19f468-d9dc-4280-a131-6c911f9d566a}</ProjectGuid>
+    <RootNamespace>generalTest</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <FreeRTOSDir>$(FREERTOS_PATH)</FreeRTOSDir>
+  </PropertyGroup>
+  <Target Name="ValidateFreeRTOSPath" BeforeTargets="PrepareForBuild">
+    <Error
+        Condition="'$(FREERTOS_PATH)' == ''"
+        Text="FREERTOS_PATH environment variable is not defined." />
+
+    <Error
+        Condition="!Exists('$(FREERTOS_PATH)\tasks.c')"
+        Text="FreeRTOS Kernel not found. Check FREERTOS_PATH." />
+</Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>..\..\firmware\app\domain\ctrlTemper;..\..\firmware\app\domain\PID;$(FreeRTOSDir)\include;$(FreeRTOSDir)\portable\MSVC-MingW;..\..\firmware\app\application\rtos_resources;..\..\firmware\app\application\tempCtrlTask;.;..\..\firmware\app\services\config;..\..\firmware\app\services\temperature;..\..\firmware\app\interface\sensor\temperature_sensor_if;..\..\firmware\app\infrastructure\sensor\temperatureSim;..\..\firmware\app\application\tempTask;..\..\firmware\app\services\logger;..\..\firmware\app\interface\logger_if;..\..\firmware\app\infrastructure\logger_file;..\..\firmware\app\application\loggerTask;..\..\firmware\app\services\timeService;..\..\firmware\app\interface\time_if;..\..\firmware\app\infrastructure\timeSim;..\..\firmware\app\interface\heater_if;..\..\firmware\app\services\heater;..\..\firmware\app\application\heaterTask;..\..\firmware\app\application\plantTask;..\..\firmware\app\services\plant;..\..\firmware\app\interface\config_if;..\..\firmware\app\infrastructure\config_file;..\..\firmware\app\infrastructure\interpolation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(FreeRTOSDir)\croutine.c" />
+    <ClCompile Include="$(FreeRTOSDir)\event_groups.c" />
+    <ClCompile Include="$(FreeRTOSDir)\list.c" />
+    <ClCompile Include="$(FreeRTOSDir)\portable\MemMang\heap_4.c" />
+    <ClCompile Include="$(FreeRTOSDir)\portable\MSVC-MingW\port.c" />
+    <ClCompile Include="$(FreeRTOSDir)\queue.c" />
+    <ClCompile Include="$(FreeRTOSDir)\stream_buffer.c" />
+    <ClCompile Include="$(FreeRTOSDir)\tasks.c" />
+    <ClCompile Include="$(FreeRTOSDir)\timers.c" />
+    <ClCompile Include="..\..\firmware\app\application\heaterTask\heaterTask.c" />
+    <ClCompile Include="..\..\firmware\app\application\loggerTask\loggerTask.c" />
+    <ClCompile Include="..\..\firmware\app\application\plantTask\plantTask.c" />
+    <ClCompile Include="..\..\firmware\app\application\rtos_resources\rtos_resources.c" />
+    <ClCompile Include="..\..\firmware\app\application\tempCtrlTask\tempCtrlTask.c" />
+    <ClCompile Include="..\..\firmware\app\application\tempTask\tempTask.c" />
+    <ClCompile Include="..\..\firmware\app\domain\ctrlTemper\ctrlTemper.c" />
+    <ClCompile Include="..\..\firmware\app\domain\PID\PID.c" />
+    <ClCompile Include="..\..\firmware\app\infrastructure\config_file\config_file.c" />
+    <ClCompile Include="..\..\firmware\app\infrastructure\interpolation\interpolation.c" />
+    <ClCompile Include="..\..\firmware\app\infrastructure\logger_file\logger_file.c" />
+    <ClCompile Include="..\..\firmware\app\infrastructure\sensor\temperatureSim\temperatureSim.c" />
+    <ClCompile Include="..\..\firmware\app\infrastructure\timeSim\timeSim.c" />
+    <ClCompile Include="..\..\firmware\app\services\config\config.c" />
+    <ClCompile Include="..\..\firmware\app\services\heater\heater.c" />
+    <ClCompile Include="..\..\firmware\app\services\logger\logger.c" />
+    <ClCompile Include="..\..\firmware\app\services\plant\plant.c" />
+    <ClCompile Include="..\..\firmware\app\services\temperature\temperature.c" />
+    <ClCompile Include="..\..\firmware\app\services\timeService\timeService.c" />
+    <ClCompile Include="main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(FreeRTOSDir)\include\croutine.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\event_groups.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\FreeRTOS.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\list.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\message_buffer.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\portable.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\projdefs.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\queue.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\semphr.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\stream_buffer.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\task.h" />
+    <ClInclude Include="$(FreeRTOSDir)\include\timers.h" />
+    <ClInclude Include="..\..\firmware\app\application\heaterTask\heaterTask.h" />
+    <ClInclude Include="..\..\firmware\app\application\loggerTask\loggerTask.h" />
+    <ClInclude Include="..\..\firmware\app\application\plantTask\plantTask.h" />
+    <ClInclude Include="..\..\firmware\app\application\rtos_resources\rtos_resources.h" />
+    <ClInclude Include="..\..\firmware\app\application\tempCtrlTask\tempCtrlTask.h" />
+    <ClInclude Include="..\..\firmware\app\application\tempTask\tempTask.h" />
+    <ClInclude Include="..\..\firmware\app\domain\ctrlTemper\ctrlTemper.h" />
+    <ClInclude Include="..\..\firmware\app\domain\PID\PID.h" />
+    <ClInclude Include="..\..\firmware\app\infrastructure\config_file\config_file.h" />
+    <ClInclude Include="..\..\firmware\app\infrastructure\interpolation\interpolation.h" />
+    <ClInclude Include="..\..\firmware\app\infrastructure\logger_file\logger_file.h" />
+    <ClInclude Include="..\..\firmware\app\infrastructure\sensor\temperatureSim\temperatureSim.h" />
+    <ClInclude Include="..\..\firmware\app\infrastructure\timeSim\timeSim.h" />
+    <ClInclude Include="..\..\firmware\app\interface\config_if\config_if.h" />
+    <ClInclude Include="..\..\firmware\app\interface\heater_if\heater_if.h" />
+    <ClInclude Include="..\..\firmware\app\interface\logger_if\logger_if.h" />
+    <ClInclude Include="..\..\firmware\app\interface\sensor\temperature_sensor_if\temperature_sensor_if.h" />
+    <ClInclude Include="..\..\firmware\app\interface\time_if\time_if.h" />
+    <ClInclude Include="..\..\firmware\app\services\config\config.h" />
+    <ClInclude Include="..\..\firmware\app\services\heater\heater.h" />
+    <ClInclude Include="..\..\firmware\app\services\logger\logger.h" />
+    <ClInclude Include="..\..\firmware\app\services\plant\plant.h" />
+    <ClInclude Include="..\..\firmware\app\services\temperature\temperature.h" />
+    <ClInclude Include="..\..\firmware\app\services\timeService\timeService.h" />
+    <ClInclude Include="FreeRTOSConfig.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

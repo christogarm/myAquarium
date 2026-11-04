@@ -1,0 +1,10 @@
+#####       Visual Studio       #####
+# Common Files
+/test/*/.vs/
+/test/*/session-state/
+/test/*/x64/
+/test/*/*.vcxproj.user
+
+# General Test
+/test/generalTest/generalTest/
+/test/generalTest/*.csv
