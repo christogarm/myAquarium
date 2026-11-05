@@ -195,32 +195,32 @@
     <ClCompile Include="..\..\firmware\app\infrastructure\interpolation\interpolation.c">
       <Filter>app\infrastructure\interpolation</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\croutine.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\croutine.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\event_groups.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\event_groups.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\list.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\portable\MemMang\heap_4.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\portable\MemMang\heap_4.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\list.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\portable\MSVC-MingW\port.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\queue.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\queue.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\portable\MSVC-MingW\port.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\stream_buffer.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\stream_buffer.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\tasks.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\tasks.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
-    <ClCompile Include="FREERTOS_PATH\timers.c">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="$(FreeRTOSDir)\timers.c">
+      <Filter>FreeRTOS Source\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,40 +299,40 @@
     <ClInclude Include="..\..\firmware\app\infrastructure\interpolation\interpolation.h">
       <Filter>app\infrastructure\interpolation</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\croutine.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\croutine.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\event_groups.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\event_groups.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\FreeRTOS.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\FreeRTOS.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\list.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\list.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\message_buffer.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\message_buffer.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\portable.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\portable.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\projdefs.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\projdefs.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\queue.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\queue.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\semphr.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\semphr.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\stream_buffer.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\stream_buffer.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\task.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\task.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="FREERTOS_PATH\include\timers.h">
+    <ClInclude Include="$(FreeRTOSDir)\include\timers.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
