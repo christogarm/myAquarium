@@ -70,7 +70,7 @@ static void indexFind_withMemory(interpolation_t* instance_, const float input_)
     uint32_t index = instance_->indexCache;
 
     if (index < 0 || index > instance_->config.sizeTab - 2) {
-        //index = indexFind(instance_, input_);
+        index = indexFind(instance_, input_);
         instance_->indexCache = index;
         return;
     }
@@ -85,7 +85,7 @@ static void indexFind_withMemory(interpolation_t* instance_, const float input_)
             pasos++;
         }
         if (input_ > instance_->config.tabX[index + 1])
-            //index = indexFind(instance_->config.tabX, instance_->config.sizeTab, input_);
+            index = indexFind(instance_, input_);
         instance_->indexCache = index;
         return;
     }
@@ -96,7 +96,7 @@ static void indexFind_withMemory(interpolation_t* instance_, const float input_)
             pasos++;
         }
         if (input_ < instance_->config.tabX[index])
-            //index = indexFind(instance_->config.tabX, instance_->config.sizeTab, input_);
+            index = indexFind(instance_, input_);
         instance_->indexCache = index;
         return;
     }
