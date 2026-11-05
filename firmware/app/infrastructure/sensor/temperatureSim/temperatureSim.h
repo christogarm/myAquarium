@@ -38,6 +38,8 @@ typedef struct
     timeData_t timeData;
     float temperature;                                              // Temperatura del Sensor
     
+	uint32_t timeUNIX;                                                    // Tiempo en formato Unix
+
     float tabTemperature[24];
     float tabTimeUnix[24];
     interpolation_t interpolation;

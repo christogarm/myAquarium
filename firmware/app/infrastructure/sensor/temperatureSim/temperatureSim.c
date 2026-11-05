@@ -69,9 +69,14 @@ temperature_states_t temperatureSim_updateSample(void* instance, float* temperat
 
 	temperatureSim_t* tempSim = (temperatureSim_t*)instance;
 
-	time_sim_get_time(&tempSim->time, &tempSim->timeData);
+	if(!tempSim->init)
+		return TEMPERATURE_STATUS_ERROR;
 
-		
+	time_sim_get_time(&tempSim->time, &tempSim->timeData);
+	tempSim->timeUNIX = tempSim->timeData.timeUNIX - tempSim->time_init.timeUNIX;
+	
+	tempSim->temperature = interpolation_calculate(&tempSim->interpolation, tempSim->timeUNIX);
+
 	*temperature = tempSim->temperature;
 	
 	return TEMPERATURE_STATE_OK;
@@ -82,9 +87,10 @@ temperature_status_t temperatureSim_reset(void* instance) {
 		return TEMPERATURE_STATUS_NULL_POINTER;
 	temperatureSim_t* tempSim = (temperatureSim_t*)instance;
 
+	if (!tempSim->init)
+		return TEMPERATURE_STATUS_ERROR;
+
 	tempSim->temperature = tempSim->tabTemperature[0];
-	time_sim_get_time(&tempSim->time, &tempSim->time_init);
-	tempSim->timeData = tempSim->time_init;
 
 	return TEMPERATURE_STATUS_OK;
 }
