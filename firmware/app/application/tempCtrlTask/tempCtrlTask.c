@@ -110,10 +110,10 @@ static void tempAquariumControl_init(void){
 
 static void obtainTemperatures(void){
     /* Esperamos las Muestras de Temperaturas */
-    getDataQueue(&waterTemp, QUEUE_ID_TEMP_WATER, RTOS_TIMEOUT_MAX);
+    rxDataQueue(&waterTemp, QUEUE_ID_TEMP_WATER, RTOS_TIMEOUT_MAX);
     
     if(ctrlEvents[CTRL_TEMPER_EVENT_ENABLE_AMB_TEMP])
-        getDataQueue(&ambTemp, QUEUE_ID_TEMP_AMB, RTOS_TIMEOUT_MAX);
+        rxDataQueue(&ambTemp, QUEUE_ID_TEMP_AMB_CONFIG, RTOS_TIMEOUT_MAX);
 
     /* Copiamos los datos de las Temperaturas */
     ctrlTemper_setTemperatures(&controlTemp, ambTemp.value, waterTemp.value);
@@ -215,5 +215,5 @@ static void sendHaterPower(float heaterPower_){
         .value = heaterPower_,
     };
 
-    setDataQueue_overWrite(&dataSensor_, QUEUE_ID_HEATER_POWER);
+    txDataQueue_overWrite(&dataSensor_, QUEUE_ID_HEATER_POWER);
 }

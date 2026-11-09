@@ -183,22 +183,20 @@ static void initAmbientTempSensor(void) {
 
 	/* Configuracion de la Tarea */
     ambientTempSensor.config.timeDelayTask_ms = 1000;          // Retraso de la tarea en milisegundos
-    ambientTempSensor.config.numTimesToSendData = 1;         // Numero de veces que se enviara la data de temperatura
-    ambientTempSensor.config.queueID = QUEUE_ID_TEMP_AMB;   // Cola para enviar los datos de temperatura
-    ambientTempSensor.config.readyData = READY_DATA_TEMP_AMB;
+    ambientTempSensor.config.bitSensor = TRANS_BIT_TEMP_AMB;
     ambientTempSensor.config.flagEnable = CONFIG_DEVICE_FLAG_AMB_TEMP; // Posicion de la configuracion en la memoria RAM
 
-    ambientTempSensor.config.sensor.config.highTemperature = configData_RAM.maxAmbientTemperature; // Temperatura mínima simulada
-    ambientTempSensor.config.sensor.config.lowTemperature = configData_RAM.minAmbientTemperature; // Temperatura mínima simulada
-    ambientTempSensor.config.sensor.config.difTemperature = configData_RAM.difAmbientTemperature; // Diferencia de temperatura para marcar el sensor como fallido
-    ambientTempSensor.config.sensor.config.errorTemperature = TEMPERATURE_ERROR_MEASUREMENT; // Temperatura de error  
-    ambientTempSensor.config.sensor.config.failedReadingTime_s = configData_RAM.timeShowFailAmbientTemp;
+    ambientTempSensor.sensor.config.highTemperature = configData_RAM.maxAmbientTemperature; // Temperatura mínima simulada
+    ambientTempSensor.sensor.config.lowTemperature = configData_RAM.minAmbientTemperature; // Temperatura mínima simulada
+    ambientTempSensor.sensor.config.difTemperature = configData_RAM.difAmbientTemperature; // Diferencia de temperatura para marcar el sensor como fallido
+    ambientTempSensor.sensor.config.errorTemperature = TEMPERATURE_ERROR_MEASUREMENT; // Temperatura de error  
+    ambientTempSensor.sensor.config.failedReadingTime_s = configData_RAM.timeShowFailAmbientTemp;
 
-    ambientTempSensor.config.sensor.config.device.init_f = temperatureSim_init;
-    ambientTempSensor.config.sensor.config.device.updateSample_f = temperatureSim_updateSample;
-    ambientTempSensor.config.sensor.config.device.reset_f = temperatureSim_reset;
-    ambientTempSensor.config.sensor.config.device.instance = &ambientTempSim;
-    ambientTempSensor.config.sensor.config.device.instanceConfig = &ambientTempSim.config;
+    ambientTempSensor.sensor.config.device.init_f = temperatureSim_init;
+    ambientTempSensor.sensor.config.device.updateSample_f = temperatureSim_updateSample;
+    ambientTempSensor.sensor.config.device.reset_f = temperatureSim_reset;
+    ambientTempSensor.sensor.config.device.instance = &ambientTempSim;
+    ambientTempSensor.sensor.config.device.instanceConfig = &ambientTempSim.config;
 }
 
 static void initLogger(void) {
@@ -243,7 +241,7 @@ static void initLogger(void) {
 static void initHeater(void) {
 	heater.config.timeUpdateHeater_ms = 100;            // Retraso de la tarea en milisegundos
 	heater.config.queueID = QUEUE_ID_HEATER_POWER;      // Cola para enviar los datos de temperatura
-	heater.config.readyData = READY_DATA_HEATER_POWER;  // Bandera para indicar que la data esta lista
+	heater.config.readyData = TRANS_BIT_HEATER_POWER;  // Bandera para indicar que la data esta lista
 
 	heater.heater.config.init_f = heaterSim_init;
     heater.heater.config.setOutput_f = heaterSim_setOutput;
@@ -281,7 +279,7 @@ static void initPlant(void) {
     planta.config.configPlant = &planta.plant.config;
     planta.config.timeDelayTask_ms = 1000;
     planta.config.queueID = QUEUE_ID_TEMP_WATER;
-    planta.config.readyData = READY_DATA_TEMP_WATER;
+    planta.config.readyData = TRANS_BIT_TEMP_WATER;
 
 }
 

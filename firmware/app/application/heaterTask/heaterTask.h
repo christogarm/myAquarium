@@ -16,7 +16,7 @@ typedef struct
 {
 	uint32_t timeUpdateHeater_ms;									// Retraso para actualizar la potencia del calefactor
 	queueID_t queueID;										// Cola para enviar los datos de temperatura
-	readyData_t readyData;											// Bandera para indicar que la data esta lista
+	transductor_bit_t readyData;											// Bandera para indicar que la data esta lista
 
 }heaterTask_config_t;
 

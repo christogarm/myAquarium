@@ -21,7 +21,7 @@ SemaphoreHandle_t mutexConfig;
 SemaphoreHandle_t mutexLogger;
 
 /* Datos Publicos */
-dataLogger_t dataLogging = {0};
+sysData_t sysData = {0};
 
 /* Prototipos de las Funciones Privadas */
 static QueueHandle_t selectQueue(queueID_t id_);
@@ -41,7 +41,7 @@ void rtos_resources_init(void){
     if (waterTempQueue == NULL) 
         while (1);
     
-    ambTempQueue = xQueueCreate(1, sizeof(queueData_t));
+    ambTempQueue = xQueueCreate(1, sizeof(configTempSensor_t));
     if (ambTempQueue == NULL) 
         while (1);
 
@@ -104,7 +104,7 @@ void queueData_reset(queueData_t* dataSensor_){
     dataSensor_->enable = false;
 }
 
-uint32_t getDataQueue(queueData_t * dataSensor_, queueID_t id_, uint32_t waitTime_){
+uint32_t rxDataQueue(void* dataSensor_, queueID_t id_, uint32_t waitTime_){
     if(dataSensor_ == NULL)
         return RTOS_ERROR;
 
@@ -115,20 +115,20 @@ uint32_t getDataQueue(queueData_t * dataSensor_, queueID_t id_, uint32_t waitTim
     return xQueueReceive(queue_, dataSensor_, waitTime_);
 }
 
-void setDataQueue(queueData_t * dataSensor_, queueID_t id_, uint32_t waitTime_){
+uint32_t txDataQueue(void* dataSensor_, queueID_t id_, uint32_t waitTime_){
     if(dataSensor_ == NULL)
-        return;
+        return RTOS_ERROR;
 
     QueueHandle_t queue_ = selectQueue(id_);
     if(queue_ == NULL)
-        return;
+        return RTOS_ERROR;
     
-    xQueueSend(queue_, dataSensor_, waitTime_);
+    return xQueueSend(queue_, dataSensor_, waitTime_);
 }
 
-void setDataQueue_overWrite(queueData_t * dataSensor_, queueID_t id_){
+uint32_t txDataQueue_overWrite(void* dataSensor_, queueID_t id_){
     if(dataSensor_ == NULL)
-        return;
+        return RTOS_ERROR;
 
     QueueHandle_t queue_ = selectQueue(id_);
     if(queue_ == NULL)
@@ -181,7 +181,7 @@ static QueueHandle_t selectQueue(queueID_t id_){
         queue_ = waterTempQueue;
         break;
 
-    case QUEUE_ID_TEMP_AMB:
+    case QUEUE_ID_TEMP_AMB_CONFIG:
         queue_ = ambTempQueue;
         break;
 
@@ -202,7 +202,7 @@ static SemaphoreHandle_t selectMutex(mutexID_t id_){
     case MUTEX_ID_CONFIGURATION:
         mutex_ = mutexConfig;
         break;
-    case MUTEX_ID_LOGGER:
+    case MUTEX_ID_SYS_DATA:
         mutex_ = mutexLogger;
         break;
     default:

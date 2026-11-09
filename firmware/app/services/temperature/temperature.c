@@ -15,6 +15,8 @@ temperature_status_t temperature_init(temperatureSensor_t * sensor_, const tempe
         config_->device.instance == NULL || config_->device.instanceConfig == NULL)
         return TEMPERATURE_STATUS_NULL_POINTER; 
 
+    sensor_->init = false;
+
     if (config_->difTemperature < 0 || config_->failedReadingTime_s <= 0)
         return TEMPERATURE_STATUS_ERROR;
 

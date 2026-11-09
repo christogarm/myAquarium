@@ -48,12 +48,12 @@ void vTimeLoggerTask(void *pvParameters){
 		timeService_getTime(&timeLogTask_Logger->timeLog_time);
         Logger->timeLog.timeUNIX = timeLogTask_Logger->timeLog_time.timeData.timeUNIX;
 
-        mutexTake(MUTEX_ID_LOGGER, RTOS_TIMEOUT_MAX);
-        Logger->timeLog.tempAmb = dataLogging.tempAmb;
-        Logger->timeLog.tempWater = dataLogging.tempWater;
-        Logger->timeLog.heaterPower = dataLogging.heaterPower;
-        readyAllDataFlag = (dataLogging.readyData & READY_DATA_ALL) == READY_DATA_ALL;
-        mutexGive(MUTEX_ID_LOGGER);
+        mutexTake(MUTEX_ID_SYS_DATA, RTOS_TIMEOUT_MAX);
+        Logger->timeLog.tempAmb = sysData.tempAmb;
+        Logger->timeLog.tempWater = sysData.tempWater;
+        Logger->timeLog.heaterPower = sysData.heaterPower;
+        readyAllDataFlag = (sysData.readyData & TRANS_BIT_ALL) == TRANS_BIT_ALL;
+        mutexGive(MUTEX_ID_SYS_DATA);
 
         if (readyAllDataFlag) {
             logger_addTimeRegister(Logger);
@@ -96,11 +96,11 @@ void vEventLoggerTask(void* pvParameters) {
         Logger->eventLog.timeUNIX_init = eventLogTask_Logger->eventLog_time.timeData.timeUNIX;
 
         /* Leemos los datos */
-        mutexTake(MUTEX_ID_LOGGER, RTOS_TIMEOUT_MAX);
-        Logger->eventLog.tempAmb_init = dataLogging.tempAmb;
-        Logger->eventLog.tempWater_init = dataLogging.tempWater;
-        Logger->eventLog.heaterPower_init = dataLogging.heaterPower;
-        mutexGive(MUTEX_ID_LOGGER);
+        mutexTake(MUTEX_ID_SYS_DATA, RTOS_TIMEOUT_MAX);
+        Logger->eventLog.tempAmb_init = sysData.tempAmb;
+        Logger->eventLog.tempWater_init = sysData.tempWater;
+        Logger->eventLog.heaterPower_init = sysData.heaterPower;
+        mutexGive(MUTEX_ID_SYS_DATA);
 
         /* Detectamos el tipo de eventos*/
         detectEvents(eventLogTask_Logger, eventsBits);

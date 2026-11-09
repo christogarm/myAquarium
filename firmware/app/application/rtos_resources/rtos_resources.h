@@ -28,30 +28,65 @@ typedef struct
     bool enable;
 }queueData_t;
 
+typedef struct
+{
+	float highTemperature;
+	float lowTemperature;
+	float difTemperature;
+	float failedReadingTime_s;
+	bool flagEnable;
+}configTempSensor_t;
+
 typedef enum {
-    READY_DATA_TEMP_WATER =     (1UL << 0),
-    READY_DATA_TEMP_AMB =       (1UL << 1),
-    READY_DATA_HEATER_POWER =   (1UL << 2),
-    READY_DATA_ALL = (READY_DATA_TEMP_WATER | READY_DATA_TEMP_AMB | READY_DATA_HEATER_POWER ),
-}readyData_t;
+    CONFIG_TASK_INIT_BIT_NONE = 0,
+    CONFIG_TASK_INIT_BIT_TEMP_WATER = (1UL << 0),
+    CONFIG_TASK_INIT_BIT_TEMP_AMB = (1UL << 1),
+    CONFIG_TASK_INIT_BIT_HEATER_POWER = (1UL << 2),
+    CONFIG_TASK_INIT_BIT_TEMP_CTRL = (1UL << 3),
+    CONFIG_TASK_INIT_BIT_TIME_LOG = (1UL << 4),
+    CONFIG_TASK_INIT_BIT_EVENT_LOG = (1UL << 5),
+    CONFIG_TASK_INIT_BIT_ALL = (CONFIG_TASK_INIT_BIT_TEMP_WATER | CONFIG_TASK_INIT_BIT_TEMP_AMB | CONFIG_TASK_INIT_BIT_HEATER_POWER | CONFIG_TASK_INIT_BIT_TEMP_CTRL | CONFIG_TASK_INIT_BIT_TIME_LOG | CONFIG_TASK_INIT_BIT_EVENT_LOG),
+}configTaskInit_bit_t;
+
+typedef enum {
+    TRANS_BIT_NONE          =       0,
+    TRANS_BIT_TEMP_WATER    =       (1UL << 0),
+    TRANS_BIT_TEMP_AMB      =       (1UL << 1),
+    TRANS_BIT_HEATER_POWER  =       (1UL << 2),
+    TRANS_BIT_ALL           =       (TRANS_BIT_TEMP_WATER | TRANS_BIT_TEMP_AMB | TRANS_BIT_HEATER_POWER),
+}transductor_bit_t;
+
+typedef enum {
+	WARNING_BIT_NONE                =       0,
+    WARNING_BIT_TEMP_WATER_HIGH     =       (1UL << 0),
+    WARNING_BIT_TEMP_WATER_LOW      =       (1UL << 1),
+    WARNING_BIT_TEMP_AMB_HIGH       =       (1UL << 2),
+    WARNING_BIT_TEMP_AMB_LOW        =       (1UL << 3),
+    WARNING_BIT_HEATER_POWER        =       (1UL << 4),
+    WARNING_BIT_ALL                 =       (WARNING_BIT_TEMP_WATER_HIGH | WARNING_BIT_TEMP_WATER_LOW | WARNING_BIT_TEMP_AMB_HIGH | WARNING_BIT_TEMP_AMB_LOW | WARNING_BIT_HEATER_POWER),
+}warning_bit_t;
 
 typedef struct
 {
 	float tempAmb;
 	float tempWater;
 	float heaterPower;
-    readyData_t readyData;
-}dataLogger_t;
+    configTaskInit_bit_t configTaskInit;
+    transductor_bit_t readyData;
+    transductor_bit_t enable;
+    transductor_bit_t failures;
+    warning_bit_t warnings;
+}sysData_t;
 
 typedef enum{
     QUEUE_ID_TEMP_WATER,
-    QUEUE_ID_TEMP_AMB,
+    QUEUE_ID_TEMP_AMB_CONFIG,
     QUEUE_ID_HEATER_POWER,
 }queueID_t;
 
 typedef enum{
     MUTEX_ID_CONFIGURATION,
-    MUTEX_ID_LOGGER,
+    MUTEX_ID_SYS_DATA,
 }mutexID_t;
 
 /* Variables Publicas */
@@ -71,7 +106,7 @@ extern SemaphoreHandle_t mutexConfig;
 extern SemaphoreHandle_t mutexLogger;
 
     /* Datos Publicos */
-extern dataLogger_t dataLogging;
+extern sysData_t sysData;
 
     /* Bits de Sitema para el Grupo de Eventos */
 typedef enum{
@@ -94,9 +129,9 @@ void rtos_clearEvent(sysGroupEvents_t event_);
 
     /* Manejo para compartir/enviar datos (Colas) */
 void queueData_reset(queueData_t* dataSensor_);
-uint32_t getDataQueue(queueData_t * dataSensor_, queueID_t id_, uint32_t waitTime_);
-void setDataQueue(queueData_t * dataSensor_, queueID_t id_, uint32_t waitTime_);
-void setDataQueue_overWrite(queueData_t * dataSensor_, queueID_t id_);
+uint32_t rxDataQueue(void * dataSensor_, queueID_t id_, uint32_t waitTime_);
+uint32_t txDataQueue(void * dataSensor_, queueID_t id_, uint32_t waitTime_);
+uint32_t txDataQueue_overWrite(void * dataSensor_, queueID_t id_);
 
     /* Mutex */
 uint32_t mutexTake(mutexID_t id_,  uint32_t waitTime_);

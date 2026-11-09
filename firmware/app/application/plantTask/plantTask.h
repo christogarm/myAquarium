@@ -19,7 +19,7 @@ typedef struct
 	uint32_t timeDelayTask_ms;										// Retraso de la tarea en milisegundos
 	
 	queueID_t queueID;												// Cola para enviar los datos de temperatura
-	readyData_t readyData;											// Bandera para indicar que la data esta lista
+	transductor_bit_t readyData;											// Bandera para indicar que la data esta lista
 
 }plantTask_config_t;
 

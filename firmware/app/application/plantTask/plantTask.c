@@ -48,9 +48,9 @@ void vPlantTask(void *pvParameters){
         startTime = getTimeSeconds();
         timeSeconds = startTime - endTime;
 
-        mutexTake(MUTEX_ID_LOGGER, RTOS_TIMEOUT_MAX);
-        taskPlant->PIDout = dataLogging.heaterPower;
-        mutexGive(MUTEX_ID_LOGGER);
+        mutexTake(MUTEX_ID_SYS_DATA, RTOS_TIMEOUT_MAX);
+        taskPlant->PIDout = sysData.heaterPower;
+        mutexGive(MUTEX_ID_SYS_DATA);
 
         plant_Update(&taskPlant->plant, taskPlant->PIDout, taskPlant->plant.config.initInput, timeSeconds);
 
@@ -60,7 +60,7 @@ void vPlantTask(void *pvParameters){
         taskPlant->dataSensor.timeStamp = startTime;
 
         
-        setDataQueue_overWrite(&taskPlant->dataSensor, taskPlant->config.queueID);
+        txDataQueue_overWrite(&taskPlant->dataSensor, taskPlant->config.queueID);
         send_dataLogger(taskPlant);
         endTime = getTimeSeconds();
         rtos_delayUntil(&xLastWakeTime, pdMS_TO_TICKS(taskPlant->config.timeDelayTask_ms));
@@ -71,13 +71,13 @@ void vPlantTask(void *pvParameters){
 
 /* Funciones Privadas */
 static void send_dataLogger(plantTask_t* plantTask_) {
-    mutexTake(MUTEX_ID_LOGGER, RTOS_TIMEOUT_MAX);
-	dataLogging.readyData |= plantTask_->config.readyData;
-    if (plantTask_->config.readyData & READY_DATA_TEMP_WATER)
-        dataLogging.tempWater = plantTask_->dataSensor.value;
-    else if (plantTask_->config.readyData & READY_DATA_TEMP_AMB)
-        dataLogging.tempAmb = plantTask_->dataSensor.value;
+    mutexTake(MUTEX_ID_SYS_DATA, RTOS_TIMEOUT_MAX);
+	sysData.readyData |= plantTask_->config.readyData;
+    if (plantTask_->config.readyData & TRANS_BIT_TEMP_WATER)
+        sysData.tempWater = plantTask_->dataSensor.value;
+    else if (plantTask_->config.readyData & TRANS_BIT_TEMP_AMB)
+        sysData.tempAmb = plantTask_->dataSensor.value;
 
-    plantTask_->PIDout = dataLogging.heaterPower;
-    mutexGive(MUTEX_ID_LOGGER);
+    plantTask_->PIDout = sysData.heaterPower;
+    mutexGive(MUTEX_ID_SYS_DATA);
 }
