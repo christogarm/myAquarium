@@ -15,17 +15,21 @@
 typedef struct
 {
 	uint32_t timeUpdateHeater_ms;									// Retraso para actualizar la potencia del calefactor
-	queueID_t queueID;										// Cola para enviar los datos de temperatura
-	transductor_bit_t readyData;											// Bandera para indicar que la data esta lista
+	transductor_bit_t heaterBit;											// Bandera para indicar que la data esta lista
+	bool flagEnable;														// Bandera para indicar si el calefactor esta habilitado
 
 }heaterTask_config_t;
 
 typedef struct
 {
 	heaterTask_config_t config;	
+	
+	bool configFailed;													// Bandera para indicar si la configuracion de la tarea fallo
+
 	heater_t heater;
+	configHeater_t configHeater;
 	queueData_t heaterDataPower;
-}heaterTask_log_t;
+}heaterTask_t;
 
 void vHeaterTask(void *pvParameters);
 

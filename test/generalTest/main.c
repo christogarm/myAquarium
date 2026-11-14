@@ -60,7 +60,7 @@ time_sim_t eventLogging;
 eventLogger_t buffEvents[LOGGER_EVENT_TYPE_NUM_EVENTS];
 
     /* Heater */
-heaterTask_log_t heater;
+heaterTask_t heater;
 char* HeaterSimText = "Salida Calentador1";
 char** HeaterSim;
 static heater_status_t heaterSim_init(void* instance_, const void* config_);
@@ -79,6 +79,8 @@ const char* dataConfig_names[] = {
 
     "Mininimun Power Heater",
     "Maximun Power Heater",
+    "Diferential Power Heater",
+    "Maximun Power Heater Alarm Delay",
 
     "Maximun Water Temperature",
     "Minimun Water Temperature",
@@ -240,15 +242,17 @@ static void initLogger(void) {
 
 static void initHeater(void) {
 	heater.config.timeUpdateHeater_ms = 100;            // Retraso de la tarea en milisegundos
-	heater.config.queueID = QUEUE_ID_HEATER_POWER;      // Cola para enviar los datos de temperatura
-	heater.config.readyData = TRANS_BIT_HEATER_POWER;  // Bandera para indicar que la data esta lista
+	heater.config.heaterBit = TRANS_BIT_HEATER_POWER;  // Bandera para indicar que la data esta lista
+	heater.config.flagEnable = (configData_RAM.flags & CONFIG_DEVICE_FLAG_HEATER) != 0; // Posicion de la configuracion en la memoria RAM
 
 	heater.heater.config.init_f = heaterSim_init;
     heater.heater.config.setOutput_f = heaterSim_setOutput;
     heater.heater.config.instance = &HeaterSim;
     heater.heater.config.configInstance = HeaterSimText;
-	heater.heater.config.rateLimit = configData_RAM.rateLimit; // Limite de cambio de potencia por segundo
-	heater.heater.config.minOutput = configData_RAM.minPowerHeater; // Potencia mínima del calefactor
+    heater.heater.config.maxPowerAlarm_delay_s = configData_RAM.maxPowerAlarm_delay_s;
+    heater.heater.config.rateLimit = configData_RAM.rateLimit; // Limite de cambio de potencia por segundo
+    heater.heater.config.difOutput = configData_RAM.difPowerHeater;
+    heater.heater.config.minOutput = configData_RAM.minPowerHeater; // Potencia mínima del calefactor
 	heater.heater.config.maxOutput = configData_RAM.maxPowerHeater; // Potencia máxima del calefactor
 
 }

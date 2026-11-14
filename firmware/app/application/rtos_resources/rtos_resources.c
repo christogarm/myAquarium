@@ -15,10 +15,12 @@ EventGroupHandle_t sysEventGroup;
 QueueHandle_t waterTempQueue;
 QueueHandle_t ambTempQueue;
 QueueHandle_t heaterPowerQueue;
+QueueHandle_t heaterPowerConfigQueue;
 
 /* Semaforos o mutexes */
 SemaphoreHandle_t mutexConfig;
-SemaphoreHandle_t mutexLogger;
+SemaphoreHandle_t mutexSysData;
+
 
 /* Datos Publicos */
 sysData_t sysData = {0};
@@ -54,8 +56,8 @@ void rtos_resources_init(void){
     if (mutexConfig == NULL) 
         while (1);
 
-    mutexLogger = xSemaphoreCreateMutex();
-    if (mutexLogger == NULL)
+    mutexSysData = xSemaphoreCreateMutex();
+    if (mutexSysData == NULL)
         while (1);
 
 }
@@ -187,7 +189,10 @@ static QueueHandle_t selectQueue(queueID_t id_){
 
     case QUEUE_ID_HEATER_POWER:
         queue_ = heaterPowerQueue;
-        break;    
+        break;  
+    case QUEUE_ID_HEATER_POWER_CONFIG:
+        queue_ = heaterPowerConfigQueue;
+        break;
 
     default:
         return NULL;
@@ -203,7 +208,7 @@ static SemaphoreHandle_t selectMutex(mutexID_t id_){
         mutex_ = mutexConfig;
         break;
     case MUTEX_ID_SYS_DATA:
-        mutex_ = mutexLogger;
+        mutex_ = mutexSysData;
         break;
     default:
         return NULL;

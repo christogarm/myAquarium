@@ -37,6 +37,15 @@ typedef struct
 	bool flagEnable;
 }configTempSensor_t;
 
+typedef struct
+{
+    float rateLimit;
+    float difPowerHeater;
+    float minPowerHeater;
+    float maxPowerHeater;
+    bool flagEnable;
+}configHeater_t;
+
 typedef enum {
     CONFIG_TASK_INIT_BIT_NONE = 0,
     CONFIG_TASK_INIT_BIT_TEMP_WATER = (1UL << 0),
@@ -82,6 +91,7 @@ typedef enum{
     QUEUE_ID_TEMP_WATER,
     QUEUE_ID_TEMP_AMB_CONFIG,
     QUEUE_ID_HEATER_POWER,
+    QUEUE_ID_HEATER_POWER_CONFIG,
 }queueID_t;
 
 typedef enum{
@@ -103,7 +113,7 @@ extern QueueHandle_t heaterPowerQueue;
 
     /* Semaforos o mutexes */
 extern SemaphoreHandle_t mutexConfig;
-extern SemaphoreHandle_t mutexLogger;
+extern SemaphoreHandle_t mutexSysData;
 
     /* Datos Publicos */
 extern sysData_t sysData;

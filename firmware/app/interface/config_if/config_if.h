@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define CONFIG_NUM_PARAMETERS                   20
+#define CONFIG_NUM_PARAMETERS                   22
 
  /* Macros para la primera programacion */
 #define CONFIG_BK_SETPOINT                      (float) 26.0f
@@ -21,6 +21,8 @@
 
 #define CONFIG_BK_MIN_POWER_HEATER              (float) 0.0f
 #define CONFIG_BK_MAX_POWER_HEATER              (float) 100.0f
+#define CONFIG_BK_DIF_POWER_HEATER              (float) 5.0f
+#define CONFIG_BK_MAX_POWER_ALARM_DELAY_S       (float) 10.0f
 
 #define CONFIG_BK_MAX_WATER_TEMP                (float) 30.0f
 #define CONFIG_BK_MIN_WATER_TEMP                (float) 25.0f
@@ -51,6 +53,7 @@ typedef enum {
     CONFIG_DEVICE_FLAG_CONTROL = (1UL << 0),
     CONFIG_DEVICE_FLAG_AMB_TEMP = (1UL << 1),
     CONFIG_DEVICE_FLAG_WATER_TEMP = (1UL << 2),
+    CONFIG_DEVICE_FLAG_HEATER = (1UL << 3),
 } config_device_flag_t;
 
 /* Enum para enmascarar los eventos a registrar */
@@ -79,6 +82,8 @@ typedef struct
     /* Configuracion del Calentador */
     float minPowerHeater;               // Potencia Mínima del Calentador
     float maxPowerHeater;               // Potencia Máxima del Calentador
+    float difPowerHeater;               // Diferencial de Potencia para Apagar las Alarmas de Potencia.
+	float maxPowerAlarm_delay_s;         // Tiempo de retraso para levantar la alarma de potencia máxima del calentador
 
     /* Configuracion del Sensor de Temperatura del Agua */
     float maxWaterTemperature;          // Temperatura máxima para levantar una Alarma de Alta Temperatura

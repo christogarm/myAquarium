@@ -13,7 +13,8 @@ heater_status_t heater_init(heater_t* heater_, const heater_config_t* config_) {
 		config_->init_f == NULL || config_->setOutput_f == NULL)
 		return HEATER_STATUS_NULL_POINTER;
 	
-	if(config_->rateLimit < 0 || config_->minOutput > config_->maxOutput)
+	if(config_->rateLimit < 0 || config_->minOutput > config_->maxOutput || 
+		config_->maxPowerAlarm_delay_s < 0)
 		return HEATER_STATUS_ERROR;
 
 	if (config_->init_f(config_->instance, config_->configInstance) != HEATER_STATUS_OK)
@@ -26,7 +27,6 @@ heater_status_t heater_init(heater_t* heater_, const heater_config_t* config_) {
 	return HEATER_STATUS_OK;
 }
 
-
 heater_status_t heater_setOutput(heater_t* heater_, float output_, float time_s) {
 	if (heater_ == NULL)
 		return HEATER_STATUS_NULL_POINTER;
@@ -36,9 +36,26 @@ heater_status_t heater_setOutput(heater_t* heater_, float output_, float time_s)
 		return HEATER_STATUS_ERROR;
 
 	heater_applyRateLimit(heater_, output_, time_s);
+
+	if (heater_->power >= heater_->config.maxOutput) {
+		heater_->timeAccumalate_s += time_s;
+		if (heater_->timeAccumalate_s >= heater_->config.maxPowerAlarm_delay_s) {
+			heater_->maxPowerAlarm = true;
+		}
+	}
+	else if (heater_->power < (heater_->config.maxOutput - heater_->config.difOutput)) {
+		heater_->timeAccumalate_s = 0;
+		heater_->maxPowerAlarm = false;
+	}
 	heater_->config.setOutput_f(heater_->config.instance, heater_->power);
 	
 	return HEATER_STATUS_OK;
+}
+
+bool heater_getMaxPowerAlarm(heater_t* heater_) {
+	if (heater_ == NULL)
+		return false;
+	return heater_->maxPowerAlarm;
 }
 
 /* Funciones Privadas */

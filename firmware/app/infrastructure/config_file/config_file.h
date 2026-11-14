@@ -13,7 +13,7 @@
 
 #include "config_if.h"
 
-#define CONFIG_READ_MAX_LINEA_CHAR		400
+#define CONFIG_READ_MAX_LINEA_CHAR		800
 #define MAX_FIELD_LEN   400
 
 typedef struct

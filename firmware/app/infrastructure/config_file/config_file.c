@@ -26,6 +26,8 @@ static const dataConfig_t CONFIG_BK_DEFAULT = {
     /* Configuracion del Calentador */
     .minPowerHeater = CONFIG_BK_MIN_POWER_HEATER,
     .maxPowerHeater = CONFIG_BK_MAX_POWER_HEATER,
+	.difPowerHeater = CONFIG_BK_DIF_POWER_HEATER,
+	.maxPowerAlarm_delay_s = CONFIG_BK_MAX_POWER_ALARM_DELAY_S,
 
     /* Configuracion del Sensor de Temperatura del Agua */
     .maxWaterTemperature = CONFIG_BK_MAX_WATER_TEMP,
@@ -148,6 +150,8 @@ config_status_t config_file_write(void* instance_, dataConfig_t* configData_) {
 
     fprintf(configFile_->file, ",%.3f", configData_->minPowerHeater);
     fprintf(configFile_->file, ",%.3f", configData_->maxPowerHeater);
+    fprintf(configFile_->file, ",%.3f", configData_->difPowerHeater);
+    fprintf(configFile_->file, ",%.3f", configData_->maxPowerAlarm_delay_s);
 
     fprintf(configFile_->file, ",%.3f", configData_->maxWaterTemperature);
     fprintf(configFile_->file, ",%.3f", configData_->minWaterTemperature);
@@ -211,11 +215,13 @@ config_status_t config_file_read(void* instance_, dataConfig_t* configData_) {
 
     parseFloat(configFile_->values[7], &configData_->minPowerHeater);
     parseFloat(configFile_->values[8], &configData_->maxPowerHeater);
+    parseFloat(configFile_->values[9], &configData_->difPowerHeater);
+    parseFloat(configFile_->values[10], &configData_->maxPowerAlarm_delay_s);
 
-    parseFloat(configFile_->values[9], &configData_->maxWaterTemperature);
-    parseFloat(configFile_->values[10], &configData_->minWaterTemperature);
-    parseFloat(configFile_->values[11], &configData_->difWaterTemperature);
-    parseFloat(configFile_->values[12], &configData_->timeShowFailWaterTemp);
+    parseFloat(configFile_->values[11], &configData_->maxWaterTemperature);
+    parseFloat(configFile_->values[12], &configData_->minWaterTemperature);
+    parseFloat(configFile_->values[13], &configData_->difWaterTemperature);
+    parseFloat(configFile_->values[14], &configData_->timeShowFailWaterTemp);
 
     parseFloat(configFile_->values[13], &configData_->maxAmbientTemperature);
     parseFloat(configFile_->values[14], &configData_->minAmbientTemperature);
