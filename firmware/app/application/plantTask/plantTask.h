@@ -14,12 +14,7 @@
 
 typedef struct
 {
-	configPlant* configPlant;
-
 	uint32_t timeDelayTask_ms;										// Retraso de la tarea en milisegundos
-	
-	queueID_t queueID;												// Cola para enviar los datos de temperatura
-	transductor_bit_t readyData;											// Bandera para indicar que la data esta lista
 
 }plantTask_config_t;
 
@@ -28,7 +23,7 @@ typedef struct
 	plantTask_config_t config;										// Configuracion de la tarea
 	queueData_t dataSensor;											// Estructura de datos para enviar a la cola
 	Plant_t plant;
-	float PIDout;
+	float heaterPower;
 }plantTask_t;
 
 void vPlantTask(void *pvParameters);

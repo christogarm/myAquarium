@@ -67,7 +67,7 @@ static heater_status_t heaterSim_init(void* instance_, const void* config_);
 static heater_status_t heaterSim_setOutput(void* instance_, float output_);
 
     /* Plant */
-plantTask_t planta = { 0 };
+plantTask_t plantTask = { 0 };
 
     /* Configuraciones */
 const char* dataConfig_names[] = {
@@ -136,7 +136,7 @@ int main(void)
         tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(vLoggerTask, "timeLoggerTask", configMINIMAL_STACK_SIZE, &timeLogger,
         tskIDLE_PRIORITY + 1, NULL);
-    xTaskCreate(vPlantTask, "waterTempTask", configMINIMAL_STACK_SIZE, &planta,
+    xTaskCreate(vPlantTask, "waterTempTask", configMINIMAL_STACK_SIZE, &plantTask,
         tskIDLE_PRIORITY + 4, NULL);
     //xTaskCreate(vTempControlTask, "CtrlTemp", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
@@ -261,23 +261,19 @@ static heater_status_t heaterSim_setOutput(void* instance_, float output_) {
 }
 
 static void initPlant(void) {
-    planta.plant.config.tau = 600;
-    planta.plant.config.K = 5;
-    planta.plant.config.initOutput = 10.0f;
-    planta.plant.config.initInput = 0.0f;
-    planta.plant.config.maxOut = 45.0f;
-    planta.plant.config.minOut = -45.0f;
-    planta.plant.config.minIn = 0;
-    planta.plant.config.maxIn = 100;
-    planta.plant.config.noiseAmpIN = 0;
-    planta.plant.config.noiseAmpOUT = 0;
-    planta.plant.config.delaySamplesIN = 1;
-    planta.plant.config.delaySamplesOUT = 1;
+    plantTask.plant.config.tau = 600;
+    plantTask.plant.config.K = 5;
+    plantTask.plant.config.initOutput = 10.0f;
+    plantTask.plant.config.initInput = 0.0f;
+    plantTask.plant.config.maxOut = 45.0f;
+    plantTask.plant.config.minOut = -45.0f;
+    plantTask.plant.config.minIn = 0;
+    plantTask.plant.config.maxIn = 100;
+    plantTask.plant.config.noiseAmpIN = 0;
+    plantTask.plant.config.noiseAmpOUT = 0;
+    plantTask.plant.config.delaySamplesIN = 1;
+    plantTask.plant.config.delaySamplesOUT = 1;
 
-    planta.config.configPlant = &planta.plant.config;
-    planta.config.timeDelayTask_ms = 1000;
-    planta.config.queueID = QUEUE_ID_TEMP_WATER;
-    planta.config.readyData = TRANS_BIT_TEMP_WATER;
-
+    plantTask.config.timeDelayTask_ms = 1000;
 }
 
