@@ -133,6 +133,9 @@
     <Filter Include="app\infrastructure\interpolation">
       <UniqueIdentifier>{a433b0f9-45fd-4d86-841e-fdb11232c3be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="app\application\diagTask">
+      <UniqueIdentifier>{f8ef69c8-30bf-4af5-866a-11408188a5a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="$(FreeRTOSDir)\timers.c">
       <Filter>FreeRTOS Source\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\firmware\app\application\diagTask\diagTask.c">
+      <Filter>app\application\diagTask</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="$(FreeRTOSDir)\include\timers.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\firmware\app\application\diagTask\diagTask.h">
+      <Filter>app\application\diagTask</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

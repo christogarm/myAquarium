@@ -31,6 +31,10 @@
 #include "config.h"
 #include "config_file.h"
 
+/* Include Configuration */
+#include "diagTask.h"
+
+
 /* Variables */
 tempTask_sensor_t ambientTempSensor;
 temperatureSim_t ambientTempSim;
@@ -103,12 +107,17 @@ config_t config_SYS;
 config_file_t configFile_SYS;
 dataConfig_t configData_RAM;
 
+    /* Diagnostico */
+diagTask_t diagTask;
+time_sim_t timeSim;
+
 /* prototipos de las Funciones Privadas */
 static void initConfig(void);
 static void initAmbientTempSensor(void);
 static void initLogger(void);
 static void initHeater(void);
 static void initPlant(void);
+static void initDaignostic(void);
 
 
 int main(void)
@@ -124,6 +133,7 @@ int main(void)
     initLogger();
     initHeater();
     initPlant();
+    initDaignostic();
 
     /* init Tasks */
     xTaskCreate(vTempControlTask, "TempCtrl", configMINIMAL_STACK_SIZE, NULL,
@@ -137,6 +147,8 @@ int main(void)
     xTaskCreate(vLoggerTask, "timeLoggerTask", configMINIMAL_STACK_SIZE, &timeLogger,
         tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(vPlantTask, "waterTempTask", configMINIMAL_STACK_SIZE, &plantTask,
+        tskIDLE_PRIORITY + 4, NULL);
+    xTaskCreate(vDiagTask, "diagTask", configMINIMAL_STACK_SIZE, &diagTask,
         tskIDLE_PRIORITY + 4, NULL);
     //xTaskCreate(vTempControlTask, "CtrlTemp", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
@@ -277,3 +289,20 @@ static void initPlant(void) {
     plantTask.config.timeDelayTask_ms = 1000;
 }
 
+static void initDaignostic(void) {
+    /* Configuracion del Tiempo Simulado*/
+    timeSim.config.utc_offset_seconds = 0;
+    timeSim.config.use_start_time = 0;
+    timeSim.config.start_unix = 0;
+
+    /* Configuracion de la tarea */
+	diagTask.config.timeDelayTask_ms = 200; // Retraso de la tarea en milisegundos
+	diagTask.config.timeLogger_addNewReg_s = configData_RAM.timeAddNewRegisterLogger; // Tiempo para agregar un nuevo registro al logger
+    
+    /* Configuracion del Servicio de Tiempo */
+	diagTask.timeService.config.init_f = time_sim_init;
+    diagTask.timeService.config.getTime_f = time_sim_get_time;
+
+    diagTask.timeService.config.instance = &timeSim;
+    diagTask.timeService.config.configInstance = &timeSim.config;
+}

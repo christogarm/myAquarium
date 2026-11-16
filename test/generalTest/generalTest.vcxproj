@@ -56,14 +56,9 @@
     <FreeRTOSDir>$(FREERTOS_PATH)</FreeRTOSDir>
   </PropertyGroup>
   <Target Name="ValidateFreeRTOSPath" BeforeTargets="PrepareForBuild">
-    <Error
-        Condition="'$(FREERTOS_PATH)' == ''"
-        Text="FREERTOS_PATH environment variable is not defined." />
-
-    <Error
-        Condition="!Exists('$(FREERTOS_PATH)\tasks.c')"
-        Text="FreeRTOS Kernel not found. Check FREERTOS_PATH." />
-</Target>
+    <Error Condition="'$(FREERTOS_PATH)' == ''" Text="FREERTOS_PATH environment variable is not defined." />
+    <Error Condition="!Exists('$(FREERTOS_PATH)\tasks.c')" Text="FreeRTOS Kernel not found. Check FREERTOS_PATH." />
+  </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -123,7 +118,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>..\..\firmware\app\domain\ctrlTemper;..\..\firmware\app\domain\PID;$(FreeRTOSDir)\include;$(FreeRTOSDir)\portable\MSVC-MingW;..\..\firmware\app\application\rtos_resources;..\..\firmware\app\application\tempCtrlTask;.;..\..\firmware\app\services\config;..\..\firmware\app\services\temperature;..\..\firmware\app\interface\sensor\temperature_sensor_if;..\..\firmware\app\infrastructure\sensor\temperatureSim;..\..\firmware\app\application\tempTask;..\..\firmware\app\services\logger;..\..\firmware\app\interface\logger_if;..\..\firmware\app\infrastructure\logger_file;..\..\firmware\app\application\loggerTask;..\..\firmware\app\services\timeService;..\..\firmware\app\interface\time_if;..\..\firmware\app\infrastructure\timeSim;..\..\firmware\app\interface\heater_if;..\..\firmware\app\services\heater;..\..\firmware\app\application\heaterTask;..\..\firmware\app\application\plantTask;..\..\firmware\app\services\plant;..\..\firmware\app\interface\config_if;..\..\firmware\app\infrastructure\config_file;..\..\firmware\app\infrastructure\interpolation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\firmware\app\domain\ctrlTemper;..\..\firmware\app\domain\PID;$(FreeRTOSDir)\include;$(FreeRTOSDir)\portable\MSVC-MingW;..\..\firmware\app\application\rtos_resources;..\..\firmware\app\application\tempCtrlTask;.;..\..\firmware\app\services\config;..\..\firmware\app\services\temperature;..\..\firmware\app\interface\sensor\temperature_sensor_if;..\..\firmware\app\infrastructure\sensor\temperatureSim;..\..\firmware\app\application\tempTask;..\..\firmware\app\services\logger;..\..\firmware\app\interface\logger_if;..\..\firmware\app\infrastructure\logger_file;..\..\firmware\app\application\loggerTask;..\..\firmware\app\services\timeService;..\..\firmware\app\interface\time_if;..\..\firmware\app\infrastructure\timeSim;..\..\firmware\app\interface\heater_if;..\..\firmware\app\services\heater;..\..\firmware\app\application\heaterTask;..\..\firmware\app\application\plantTask;..\..\firmware\app\services\plant;..\..\firmware\app\interface\config_if;..\..\firmware\app\infrastructure\config_file;..\..\firmware\app\infrastructure\interpolation;..\..\firmware\app\application\diagTask;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +156,7 @@
     <ClCompile Include="$(FreeRTOSDir)\stream_buffer.c" />
     <ClCompile Include="$(FreeRTOSDir)\tasks.c" />
     <ClCompile Include="$(FreeRTOSDir)\timers.c" />
+    <ClCompile Include="..\..\firmware\app\application\diagTask\diagTask.c" />
     <ClCompile Include="..\..\firmware\app\application\heaterTask\heaterTask.c" />
     <ClCompile Include="..\..\firmware\app\application\loggerTask\loggerTask.c" />
     <ClCompile Include="..\..\firmware\app\application\plantTask\plantTask.c" />
@@ -195,6 +191,7 @@
     <ClInclude Include="$(FreeRTOSDir)\include\stream_buffer.h" />
     <ClInclude Include="$(FreeRTOSDir)\include\task.h" />
     <ClInclude Include="$(FreeRTOSDir)\include\timers.h" />
+    <ClInclude Include="..\..\firmware\app\application\diagTask\diagTask.h" />
     <ClInclude Include="..\..\firmware\app\application\heaterTask\heaterTask.h" />
     <ClInclude Include="..\..\firmware\app\application\loggerTask\loggerTask.h" />
     <ClInclude Include="..\..\firmware\app\application\plantTask\plantTask.h" />
