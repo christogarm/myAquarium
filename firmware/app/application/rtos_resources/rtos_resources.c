@@ -5,6 +5,10 @@
 #include "rtos_resources.h"
 
 
+/* Includes de los servicios */
+#include "logger.h"
+
+
 /* Tareas */
 TaskHandle_t xControlTask = NULL;
 
@@ -16,6 +20,8 @@ QueueHandle_t waterTempQueue;
 QueueHandle_t ambTempQueue;
 QueueHandle_t heaterPowerQueue;
 QueueHandle_t heaterPowerConfigQueue;
+QueueHandle_t loggerEventQueue;
+QueueHandle_t loggerTimeQueue;
 
 /* Semaforos o mutexes */
 SemaphoreHandle_t mutexConfig;
@@ -50,7 +56,15 @@ void rtos_resources_init(void){
     heaterPowerQueue = xQueueCreate(1, sizeof(queueData_t));
     if (heaterPowerQueue == NULL) 
         while (1);
-   
+
+    loggerEventQueue = xQueueCreate(5, sizeof(eventLogger_t));
+    if (loggerEventQueue == NULL)
+        while (1);
+
+    loggerTimeQueue = xQueueCreate(5, sizeof(timeLogger_t));
+    if (loggerTimeQueue == NULL)
+        while (1);
+
     /* init Semaforos o mutexes */
     mutexConfig = xSemaphoreCreateMutex();
     if (mutexConfig == NULL) 
@@ -112,7 +126,7 @@ uint32_t rxDataQueue(void* dataSensor_, queueID_t id_, uint32_t waitTime_){
 
     QueueHandle_t queue_ = selectQueue(id_);
     if(queue_ == NULL)
-        return RTOS_ERROR   ;
+        return RTOS_ERROR;
 
     return xQueueReceive(queue_, dataSensor_, waitTime_);
 }
@@ -182,18 +196,21 @@ static QueueHandle_t selectQueue(queueID_t id_){
     case QUEUE_ID_TEMP_WATER:
         queue_ = waterTempQueue;
         break;
-
     case QUEUE_ID_TEMP_AMB_CONFIG:
         queue_ = ambTempQueue;
         break;
-
     case QUEUE_ID_HEATER_POWER:
         queue_ = heaterPowerQueue;
         break;  
     case QUEUE_ID_HEATER_POWER_CONFIG:
         queue_ = heaterPowerConfigQueue;
         break;
-
+    case QUEUE_ID_LOGGER_EVENT:
+        queue_ = loggerEventQueue;
+        break;
+    case QUEUE_ID_LOGGER_TIME:
+        queue_ = loggerTimeQueue;
+        break;
     default:
         return NULL;
         break;

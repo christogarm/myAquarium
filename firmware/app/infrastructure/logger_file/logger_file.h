@@ -17,27 +17,21 @@ typedef struct
 {
     const char* filename;      // Nombre del Archivo
     char** pEncabezado;        // Apuntador para escribir el encabezado de la tabla de Datos
+	logger_type_t type;
+	uint8_t numColumns;
 } logger_file_config_t;
 
 typedef struct
 {
-	logger_file_config_t configEvent;
-	logger_file_config_t configTime;
-	uint32_t countEventRegisters;
-	uint32_t countTimeRegisters;
-    FILE* fileLoggerEvent;          // Archivo
-    FILE* fileLoggerTime;           // Archivo
+	logger_file_config_t config;
+	uint32_t countRegisters;
 
-	timeLogger_t timeLog;
-	eventLogger_t eventLog;
 	bool init;
 } logger_file_t;
 
 
-logger_status_t logger_file_init(void* logger_, const void* configEvent_, const void* configTime_);
-logger_status_t logger_file_addEventRegister(void* logger_, eventLogger_t* eventLog);
-logger_status_t logger_file_addTimeRegister(void* logger_, timeLogger_t* timeLog);
-void* logger_file_readTimeLogger(void* logger_, uint32_t numRegister);
-void* logger_file_readEventLogger(void* logger_, uint32_t numRegister);
+logger_status_t logger_file_init(void* instance, const void* config_);
+logger_status_t logger_file_addRegister(void* instance, void* log);
+logger_status_t logger_file_readRegister(void* instance, void* logRegister, uint32_t numRegister);
 
 #endif

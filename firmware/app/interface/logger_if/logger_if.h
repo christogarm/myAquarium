@@ -17,6 +17,11 @@ typedef enum {
 }logger_status_t;
 
 typedef enum {
+	LOGGER_TYPE_EVENT,
+	LOGGER_TYPE_TIME,
+}logger_type_t;
+
+typedef enum {
 	LOGGER_EVENT_TYPE_FAIL_AMB_TEMP = 0,
 	LOGGER_EVENT_TYPE_FAIL_WATER_TEMP,
 	LOGGER_EVENT_TYPE_FAIL_HEATER,
@@ -49,10 +54,8 @@ typedef struct
 } eventLogger_t;
 
  /* Callbacks */
-typedef logger_status_t(*logger_init_f)(void* instance, const void* configEvent_, const void* configTime_);
-typedef logger_status_t(*logger_addEventRegister_f)(void* instance, eventLogger_t* eventLog_);
-typedef logger_status_t(*logger_addTimeRegister_f)(void* instance, timeLogger_t* timeLog_);
-typedef void*(*logger_readTimeLogger_f)(void* instance, uint32_t numRegister);
-typedef void*(*logger_readEventLogger_f)(void* instance, uint32_t numRegister);
+typedef logger_status_t(*logger_init_f)(void* instance, const void* config);
+typedef logger_status_t(*logger_addRegister_f)(void* instance, void* logRegister);
+typedef logger_status_t(*logger_readRegister_f)(void* instance, void* logRegister, uint32_t numRegister);
 
 #endif /* LOGGER_IF_H */

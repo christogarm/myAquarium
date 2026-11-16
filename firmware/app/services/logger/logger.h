@@ -17,14 +17,13 @@
 typedef struct
 {
 	logger_init_f init_f;
-	logger_addEventRegister_f addRegisterEvent_f;
-	logger_addTimeRegister_f addRegisterTime_f;
-	logger_readTimeLogger_f readTimeLogger_f;
-	logger_readEventLogger_f readEventLogger_f;
+	logger_addRegister_f addRegister_f;
+	logger_readRegister_f readRegister_f;
 
 	void* instance;
-	void* configInstanceEvent;
-	void* configInstanceTime;
+	void* instanceConfig;
+
+	logger_type_t type;
 }logger_config_t;
 
 
@@ -35,17 +34,17 @@ typedef struct
 	eventLogger_t eventLog;
 	timeLogger_t timeLog;
 
+	void* log;
+
 	bool init;
 }logger_t;
 
 
 /* Prototipos de las funciones Publicas */
 logger_status_t logger_init(logger_t* logger_, const logger_config_t* config_);
-logger_status_t logger_addEventRegister(logger_t* logger_);
-logger_status_t logger_addTimeRegister(logger_t* logger_);
-void* logger_readTimeLogger(logger_t* logger_, uint32_t numRegister_);
-void* logger_readEventLogger(logger_t* logger_, uint32_t numRegister_);
-bool logger_isInit(const logger_t* logger_);
+logger_status_t logger_addRegister(logger_t* logger_);
+logger_status_t logger_readRegister(logger_t* logger_, uint32_t numRegister_);
+
 
 
 #endif /* LOGGER_H */

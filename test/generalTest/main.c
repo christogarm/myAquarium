@@ -36,8 +36,8 @@ tempTask_sensor_t ambientTempSensor;
 temperatureSim_t ambientTempSim;
 
     /* Logger */
-loggerTask_log_t logging;
-logger_file_t loggerFile;
+loggerTask_t timeLogger;
+logger_file_t timeLogger_file;
 const char* encabezadoLogEvent[] = {
     "timeUNIX_init", 
     "timeUNIX_end", 
@@ -49,15 +49,15 @@ const char* encabezadoLogEvent[] = {
     "heaterPower_init", 
     "heaterPower_end"
 };
+
+loggerTask_t eventLogger;
+logger_file_t eventLogger_file;
 const char* encabezadoLogTime[] = {
     "timeUNIX",
     "tempAmb",
     "tempWater",
     "heaterPower"
 };
-time_sim_t timeLogging;
-time_sim_t eventLogging;
-eventLogger_t buffEvents[LOGGER_EVENT_TYPE_NUM_EVENTS];
 
     /* Heater */
 heaterTask_t heater;
@@ -134,7 +134,7 @@ int main(void)
         tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(vHeaterTask, "heaterTask", configMINIMAL_STACK_SIZE, &heater,
         tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(vTimeLoggerTask, "timeLoggerTask", configMINIMAL_STACK_SIZE, &logging,
+    xTaskCreate(vLoggerTask, "timeLoggerTask", configMINIMAL_STACK_SIZE, &timeLogger,
         tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(vPlantTask, "waterTempTask", configMINIMAL_STACK_SIZE, &planta,
         tskIDLE_PRIORITY + 4, NULL);
@@ -202,42 +202,36 @@ static void initAmbientTempSensor(void) {
 }
 
 static void initLogger(void) {
-    /* Inicialización del logger para almacenamienti en archivos */
-	loggerFile.configEvent.filename = "EventosLog.csv";
-	loggerFile.configEvent.pEncabezado = &encabezadoLogEvent;
-	loggerFile.configTime.filename = "TiempoLog.csv";
-	loggerFile.configTime.pEncabezado = &encabezadoLogTime;
+    /* Inicialización del logger para almacenamiento en archivos */
+	timeLogger_file.config.filename = "TiempoLog.csv";
+	timeLogger_file.config.pEncabezado = encabezadoLogTime;
+	timeLogger_file.config.type = LOGGER_TYPE_TIME;
+    timeLogger_file.config.numColumns = LOGGER_SIZE_COLUMNS_TIME;
 
-    /* Incializacion del tiempo*/
-    timeLogging.config.utc_offset_seconds = 0;
-    timeLogging.config.use_start_time = false;
-    timeLogging.config.start_unix = 0;
+    eventLogger_file.config.filename = "EventosLog.csv";
+    eventLogger_file.config.pEncabezado = encabezadoLogEvent;
+    eventLogger_file.config.type = LOGGER_TYPE_EVENT;
+    eventLogger_file.config.numColumns = LOGGER_SIZE_COLUMNS_EVENT ;
 
-    eventLogging.config.utc_offset_seconds = 0;
-    eventLogging.config.use_start_time = false;
-    eventLogging.config.start_unix = 0;
+    /* Configuracion del Logger*/
+	timeLogger.logger.config.init_f = logger_file_init;
+    timeLogger.logger.config.addRegister_f = logger_file_addRegister;
+    timeLogger.logger.config.readRegister_f = logger_file_readRegister;
+	timeLogger.logger.config.instance = &timeLogger_file;
+    timeLogger.logger.config.instanceConfig = &timeLogger_file;
+	timeLogger.logger.config.type = LOGGER_TYPE_TIME;
 
-    /*Configuracion de la Tarea del logging*/
-	logging.config.timeAddRegisterTime_ms = (uint32_t)(configData_RAM.timeAddNewRegisterLogger*1000); // Retraso de la tarea en segundos
-    logging.config.typesEvents_enable = SYS_EVENT_GROUP_ALL;
-    logging.config.buffEvents = buffEvents;
+    eventLogger.logger.config.init_f = logger_file_init;
+    eventLogger.logger.config.addRegister_f = logger_file_addRegister;
+    eventLogger.logger.config.readRegister_f = logger_file_readRegister;
+    eventLogger.logger.config.instance = &eventLogger_file;
+    eventLogger.logger.config.instanceConfig = &eventLogger_file;
+    eventLogger.logger.config.type = LOGGER_TYPE_EVENT;
 
-	logging.logger.config.init_f = logger_file_init;
-    logging.logger.config.addRegisterEvent_f = logger_file_addEventRegister;
-    logging.logger.config.addRegisterTime_f = logger_file_addTimeRegister;
-    logging.logger.config.readTimeLogger_f = logger_file_readTimeLogger;
-    logging.logger.config.readEventLogger_f = logger_file_readEventLogger;
-
-    logging.logger.config.instance = &loggerFile;
-    logging.logger.config.configInstanceEvent = &loggerFile.configEvent;
-    logging.logger.config.configInstanceTime = &loggerFile.configTime;
-
-	logging.timeLog_time.config.init_f = time_sim_init;
-    logging.timeLog_time.config.getTime_f = time_sim_get_time;
-    logging.timeLog_time.config.instance = &timeLogging;
-    logging.timeLog_time.config.configInstance = &timeLogging.config;
-
-    logger_init(&logging.logger, &logging.logger.config);
+    /*Configuracion de la Tarea del Logger */
+	timeLogger.config.queueID = QUEUE_ID_LOGGER_TIME;
+    
+    eventLogger.config.queueID = QUEUE_ID_LOGGER_EVENT;
 }
 
 static void initHeater(void) {

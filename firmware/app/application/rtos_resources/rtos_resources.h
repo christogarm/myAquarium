@@ -92,6 +92,8 @@ typedef enum{
     QUEUE_ID_TEMP_AMB_CONFIG,
     QUEUE_ID_HEATER_POWER,
     QUEUE_ID_HEATER_POWER_CONFIG,
+    QUEUE_ID_LOGGER_EVENT,
+    QUEUE_ID_LOGGER_TIME,
 }queueID_t;
 
 typedef enum{
