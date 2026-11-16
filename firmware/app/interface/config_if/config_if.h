@@ -38,7 +38,9 @@
 #define CONFIG_BK_ENABLE_EVENT_MASK             (config_event_mask_t) CONFIG_EVENT_MASK_ALL
 
 #define CONFIG_BK_FLAGS                         (config_device_flag_t) (    CONFIG_DEVICE_FLAG_CONTROL +                    \
-                                                                            CONFIG_DEVICE_FLAG_AMB_TEMP                     \
+                                                                            CONFIG_DEVICE_FLAG_AMB_TEMP +                   \
+                                                                            CONFIG_DEVICE_FLAG_WATER_TEMP +                 \
+                                                                            CONFIG_DEVICE_FLAG_HEATER                       \
                                                                         )
 
  /* Enum para los tipos de eventos a loggear */

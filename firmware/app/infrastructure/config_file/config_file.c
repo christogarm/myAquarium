@@ -223,15 +223,15 @@ config_status_t config_file_read(void* instance_, dataConfig_t* configData_) {
     parseFloat(configFile_->values[13], &configData_->difWaterTemperature);
     parseFloat(configFile_->values[14], &configData_->timeShowFailWaterTemp);
 
-    parseFloat(configFile_->values[13], &configData_->maxAmbientTemperature);
-    parseFloat(configFile_->values[14], &configData_->minAmbientTemperature);
-    parseFloat(configFile_->values[15], &configData_->difAmbientTemperature);
-    parseFloat(configFile_->values[16], &configData_->timeShowFailAmbientTemp);
+    parseFloat(configFile_->values[15], &configData_->maxAmbientTemperature);
+    parseFloat(configFile_->values[16], &configData_->minAmbientTemperature);
+    parseFloat(configFile_->values[17], &configData_->difAmbientTemperature);
+    parseFloat(configFile_->values[18], &configData_->timeShowFailAmbientTemp);
 
-    parseFloat(configFile_->values[17], &configData_->timeAddNewRegisterLogger);
-    parseUint(configFile_->values[18], &configData_->enabled_events_mask);
+    parseFloat(configFile_->values[19], &configData_->timeAddNewRegisterLogger);
+    parseUint(configFile_->values[20], &configData_->enabled_events_mask);
 
-    parseUint(configFile_->values[19], &configData_->flags);
+    parseUint(configFile_->values[21], &configData_->flags);
 
     return CONFIG_STATUS_OK;
 }

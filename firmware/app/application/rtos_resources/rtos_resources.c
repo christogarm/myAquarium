@@ -57,6 +57,10 @@ void rtos_resources_init(void){
     if (heaterPowerQueue == NULL) 
         while (1);
 
+    heaterPowerConfigQueue = xQueueCreate(1, sizeof(configHeater_t));
+    if (heaterPowerConfigQueue == NULL)
+        while (1);
+
     loggerEventQueue = xQueueCreate(5, sizeof(eventLogger_t));
     if (loggerEventQueue == NULL)
         while (1);
