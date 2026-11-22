@@ -20,6 +20,8 @@ QueueHandle_t waterTempQueue;
 QueueHandle_t ambTempQueue;
 QueueHandle_t heaterPowerQueue;
 QueueHandle_t heaterPowerConfigQueue;
+QueueHandle_t tempCtrlDataQueue;
+QueueHandle_t tempCtrlConfigQueue;
 QueueHandle_t loggerEventQueue;
 QueueHandle_t loggerTimeQueue;
 
@@ -60,7 +62,15 @@ void rtos_resources_init(void){
     heaterPowerConfigQueue = xQueueCreate(1, sizeof(configHeater_t));
     if (heaterPowerConfigQueue == NULL)
         while (1);
+    
+    tempCtrlDataQueue = xQueueCreate(1, sizeof(dataSensor_CtrlTemper_t));
+    if (tempCtrlDataQueue == NULL)
+        while (1);
 
+    tempCtrlConfigQueue = xQueueCreate(1, sizeof(configCtrlTemper_t));
+    if (tempCtrlConfigQueue == NULL)
+        while (1);
+    
     loggerEventQueue = xQueueCreate(5, sizeof(eventLogger_t));
     if (loggerEventQueue == NULL)
         while (1);
@@ -209,6 +219,12 @@ static QueueHandle_t selectQueue(queueID_t id_){
     case QUEUE_ID_HEATER_POWER_CONFIG:
         queue_ = heaterPowerConfigQueue;
         break;
+	case QUEUE_ID_TEMP_CTRL_DATA:
+		queue_ = tempCtrlDataQueue;
+		break;
+	case QUEUE_ID_TEMP_CTRL_CONFIG:
+		queue_ = tempCtrlConfigQueue;
+		break;
     case QUEUE_ID_LOGGER_EVENT:
         queue_ = loggerEventQueue;
         break;

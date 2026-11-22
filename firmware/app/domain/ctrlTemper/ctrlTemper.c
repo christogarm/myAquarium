@@ -4,7 +4,8 @@
  */
 
 
- #include "ctrlTemper.h"
+#include "ctrlTemper.h"
+#include <stdlib.h>
 
  /* Prototipos de las Funciones privadas */
 static void ctrlTemper_stateReset(ctrlTemper_t * ctrlTemper_, _Bool * eventFlags_);
@@ -12,6 +13,8 @@ static void ctrlTemper_stateWait(ctrlTemper_t * ctrlTemper_, _Bool * eventFlags_
 static void ctrlTemper_stateControl(ctrlTemper_t * ctrlTemper_);
 static void ctrlTemper_stateFault(ctrlTemper_t * ctrlTemper_,  _Bool * eventFlags_);
 static void ctrlTemper_stateDisable(ctrlTemper_t * ctrlTemper_,  _Bool * eventFlags_);
+static void ctrlTemper_resetData(ctrlTemper_data_t* ctrlTemper_data_);
+
 
  /* Funciones Publicas */
 ctrlTemper_status_t ctrlTemper_Init(ctrlTemper_t * ctrlTemper_, ctrlTemper_config_t * config_){
@@ -25,23 +28,26 @@ ctrlTemper_status_t ctrlTemper_Init(ctrlTemper_t * ctrlTemper_, ctrlTemper_confi
 		return CTRL_TEMPER_STATUS_ERROR;
 
     ctrlTemper_->config = *config_;
+
+    ctrlTemper_resetData(&ctrlTemper_->data);
     ctrlTemper_ ->state = CTRL_TEMPER_STATE_RESET;
     ctrlTemper_->init = 1;
     ctrlTemper_->heaterPower = 0;
-    ctrlTemper_->ambTemp = 0;
-    ctrlTemper_->waterTemp = 0;
-    ctrlTemper_->dt = 0;
     ctrlTemper_->newDataPower = 0;
 
     return CTRL_TEMPER_STATUS_OK;
 }    
 
-ctrlTemper_status_t ctrlTemper_MachineState(ctrlTemper_t * ctrlTemper_, _Bool * eventFlags_){
-    if(ctrlTemper_ == NULL || eventFlags_ == NULL)
+ctrlTemper_status_t ctrlTemper_MachineState(ctrlTemper_t * ctrlTemper_, ctrlTemper_data_t* data_){
+    if(ctrlTemper_ == NULL || data_ == NULL ||
+        data_->eventFlags == NULL)
         return CTRL_TEMPER_STATUS_NULL_POINTER;
 
     if(!ctrlTemper_->init)
         return CTRL_TEMPER_STATUS_ERROR;
+
+	bool* eventFlags_ = data_->eventFlags;
+	ctrlTemper_->data = *data_;
 
     if(eventFlags_[CTRL_TEMPER_EVENT_POWER_ON] || eventFlags_[CTRL_TEMPER_EVENT_RECONFIGURATION])
         ctrlTemper_->state = CTRL_TEMPER_STATE_RESET;
@@ -79,25 +85,6 @@ ctrlTemper_status_t ctrlTemper_MachineState(ctrlTemper_t * ctrlTemper_, _Bool * 
     return CTRL_TEMPER_STATUS_OK;
 }
 
-ctrlTemper_status_t ctrlTemper_setTemperatures(ctrlTemper_t * ctrlTemper_, float ambTemp_, float waterTemp_){
-    if(ctrlTemper_ == NULL)
-        return CTRL_TEMPER_STATUS_NULL_POINTER;
-
-    ctrlTemper_->ambTemp = ambTemp_;
-    ctrlTemper_->waterTemp = waterTemp_;
-    
-    return CTRL_TEMPER_STATUS_OK;
-}
-
-ctrlTemper_status_t ctrlTemper_setDtime(ctrlTemper_t * ctrlTemper_, float dt_){
-    if(ctrlTemper_ == NULL)
-        return CTRL_TEMPER_STATUS_NULL_POINTER;
-
-    ctrlTemper_->dt = dt_;
-    
-    return CTRL_TEMPER_STATUS_OK;
-}
-
 ctrlTemper_status_t ctrlTemper_setState(ctrlTemper_t * ctrlTemper_, ctrlTemper_state_t state_){
     if(ctrlTemper_ == NULL)
         return CTRL_TEMPER_STATUS_NULL_POINTER;
@@ -125,17 +112,17 @@ float ctrlTemper_getHeaterPower(ctrlTemper_t * ctrlTemper_){
     return ctrlTemper_->heaterPower;
 }
 
-_Bool ctrlTemper_isAvailablePowerHeater(ctrlTemper_t * ctrlTemper_){
+bool ctrlTemper_isAvailablePowerHeater(ctrlTemper_t * ctrlTemper_){
     if(ctrlTemper_ == NULL)
-        return 0;
+        return false;
     return ctrlTemper_->newDataPower;
 }
 
 /* Funciones Privadas */
 static void ctrlTemper_stateReset(ctrlTemper_t * ctrlTemper_, _Bool * eventFlags_){
+
     ctrlTemper_->heaterPower = 0;
     ctrlTemper_->newDataPower = 0;
-    ctrlTemper_->dt = 0;
 
     if(eventFlags_[CTRL_TEMPER_EVENT_FIRST_SAMPLE]){
         ctrlTemper_->state = CTRL_TEMPER_STATE_WAIT;
@@ -155,7 +142,7 @@ static void ctrlTemper_stateControl(ctrlTemper_t * ctrlTemper_){
     ctrlTemper_->state = CTRL_TEMPER_STATE_WAIT;
 
     /* Ejecutamos el control PID */
-    ctrlTemper_->config.update_f(ctrlTemper_->config.instance, ctrlTemper_->waterTemp, ctrlTemper_->dt);
+    ctrlTemper_->config.update_f(ctrlTemper_->config.instance, ctrlTemper_->data.waterTemp, ctrlTemper_->data.dt_s);
 	PIDout = ctrlTemper_->config.getOutput_f(ctrlTemper_->config.instance); 
 
     /* Falta Implementar Feedfoward */
@@ -183,4 +170,14 @@ static void ctrlTemper_stateFault(ctrlTemper_t * ctrlTemper_,  _Bool * eventFlag
 static void ctrlTemper_stateDisable(ctrlTemper_t * ctrlTemper_,  _Bool * eventFlags_){
     if (eventFlags_[CTRL_TEMPER_EVENT_ENABLE_CONTROL])
         ctrlTemper_->state = CTRL_TEMPER_STATE_RESET;  
+}
+
+static void ctrlTemper_resetData(ctrlTemper_data_t* ctrlTemper_data_){
+    ctrlTemper_data_->eventFlags = NULL;
+
+    ctrlTemper_data_->ambTemp = 0;
+    ctrlTemper_data_->waterTemp = 0;
+    ctrlTemper_data_->dt_s = 0;
+
+    return CTRL_TEMPER_STATUS_OK;
 }

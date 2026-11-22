@@ -79,21 +79,6 @@
     <Filter Include="app\interface\time_if">
       <UniqueIdentifier>{2c1f8524-035e-4caa-b8cb-ef4c6db97e29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="app\domain\infrastructure">
-      <UniqueIdentifier>{b3771c0e-231b-4fa4-9bca-e6de37b51777}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\domain\infrastructure\sensor">
-      <UniqueIdentifier>{c010f433-94ec-4d12-864d-20ecd128dfcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\domain\infrastructure\sensor\temperatureSim">
-      <UniqueIdentifier>{7a4b0403-d542-48f2-ac30-041a8e5a5006}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\domain\infrastructure\logger_file">
-      <UniqueIdentifier>{5e593170-cae6-4ec1-b8d2-80ae07b2a22c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app\domain\infrastructure\timeSim">
-      <UniqueIdentifier>{4c9061a3-8a5e-488e-896d-5b1d14316704}</UniqueIdentifier>
-    </Filter>
     <Filter Include="app\services\heater">
       <UniqueIdentifier>{c9d5de15-474c-44b7-9034-b5caf8504628}</UniqueIdentifier>
     </Filter>

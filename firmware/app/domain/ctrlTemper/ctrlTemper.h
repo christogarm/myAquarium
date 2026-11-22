@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 /* Macros */
 #define numEvents                                   11
@@ -51,6 +52,12 @@ typedef enum{
 }ctrlTemper_event_t;
 
     /* Configuracion del control de Temperatura */
+typedef struct {
+	bool* eventFlags;                                 // Puntero a un arreglo de eventos del control de Temperatura
+	float ambTemp, waterTemp;                            // Temperatura Ambiente y Temperatura del Agua
+    float dt_s;
+}ctrlTemper_data_t;
+
 typedef struct
 {
 	void* instance;                                 // Instancia del Controlador de Temperatura, este define el tipo de controlador que se utilizr[a
@@ -71,23 +78,19 @@ typedef struct
 {
     ctrlTemper_config_t config;
     ctrlTemper_state_t state;
-    float ambTemp, waterTemp;
+	ctrlTemper_data_t data;
     float heaterPower;
-    _Bool newDataPower;
-    float dt;
-    _Bool init;
+    bool newDataPower;
+    bool init;
 }ctrlTemper_t;
 
 
 /* Prototipos de las funciones Publicas */
 ctrlTemper_status_t ctrlTemper_Init(ctrlTemper_t * ctrlTemper_, ctrlTemper_config_t * config_);
-ctrlTemper_status_t ctrlTemper_MachineState(ctrlTemper_t * ctrlTemper_, _Bool * eventFlags_);
-ctrlTemper_status_t ctrlTemper_setTemperatures(ctrlTemper_t * ctrlTemper_, float ambTemp_, float waterTemp_);
-ctrlTemper_status_t ctrlTemper_setDtime(ctrlTemper_t * ctrlTemper_, float dt_);
+ctrlTemper_status_t ctrlTemper_MachineState(ctrlTemper_t * ctrlTemper_, ctrlTemper_data_t* data_);
 ctrlTemper_status_t ctrlTemper_setState(ctrlTemper_t * ctrlTemper_, ctrlTemper_state_t state_);
-ctrlTemper_state_t ctrlTemper_getState(ctrlTemper_t * ctrlTemper_);
 float ctrlTemper_getHeaterPower(ctrlTemper_t * ctrlTemper_);
-_Bool ctrlTemper_isAvailablePowerHeater(ctrlTemper_t * ctrlTemper_);
+bool ctrlTemper_isAvailablePowerHeater(ctrlTemper_t * ctrlTemper_);
 
 
 #endif /* CTRL_TEMPER_H */

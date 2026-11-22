@@ -3,10 +3,8 @@
  */
 
 #include "tempCtrlTask.h"
-#include "ctrlTemper.h"
 #include "FreeRTOS.h"
 #include "config.h"
-#include "rtos_resources.h"
 #include "task.h"
 #include "PID.h"
 
@@ -32,13 +30,20 @@ static void tempAquariumControl_init(void);
 static void obtainTemperatures(void);
 
 static void tempCtrl_stateEvents(ctrlTemper_t * ctrlTemper_);
-static void detectEvent_powerOn(void);
-static void detectEvent_reconfig(void);
-static void detectEvent_heaterFail(void);
+static void detectEvent_powerOn(tempCtrlTask_t* tempCtrlTask_);
+static void detectEvent_reconfig(tempCtrlTask_t* tempCtrlTask_);
+static void detectEvent_heaterFail(tempCtrlTask_t* tempCtrlTask_);
 static void sendHaterPower(float heaterPower_);
 
 /* Funciones Publicas */
 void vTempControlTask(void *pvParameters){
+    
+    if (pvParameters == NULL) {
+        vTaskDelete(NULL);
+        return;
+    }
+
+    tempCtrlTask_t *tempCtrlTask_ = (tempCtrlTask_t *)pvParameters;
 
     /* Inicializacion de Variables */
     tempAquariumControl_init();          // Control de Temperatura
@@ -47,15 +52,15 @@ void vTempControlTask(void *pvParameters){
     {   
         /* Detección de eventos */
             /* Detección de eventos sin dependencia del estado */
-        detectEvent_powerOn();                      // Evento del Power On
-        detectEvent_reconfig();                     // Evento de Reconfiguracion
-        detectEvent_heaterFail();                   // Evento de falla del calentador
+        detectEvent_powerOn(tempCtrlTask_);                      // Evento del Power On
+        detectEvent_reconfig(tempCtrlTask_);                     // Evento de Reconfiguracion
+        detectEvent_heaterFail(tempCtrlTask_);                   // Evento de falla del calentador
 
             /* Detección de eventos dependiendo del estado, asi como las acciones a realizar por estado */
         tempCtrl_stateEvents(&controlTemp);
 
         /* Maquina de estados del control de Temperatura */
-        ctrlTemper_MachineState(&controlTemp, ctrlEvents);
+        ctrlTemper_MachineState(&controlTemp, tempCtrlTask_->ctrlEvents);
 
         /* Compartirmos el valor de la potencia del Calentador, en caso de tener un nuevo Valor */
         if(ctrlTemper_isAvailablePowerHeater(&controlTemp))
@@ -108,44 +113,43 @@ static void tempAquariumControl_init(void){
     rtos_clearEvent(CTRL_TEMPER_EVENT_RECONFIGURATION);
 }
 
-static void obtainTemperatures(void){
+static void obtainTemperatures(tempCtrlTask_t* tempCtrlTask_){
     /* Esperamos las Muestras de Temperaturas */
-    rxDataQueue(&waterTemp, QUEUE_ID_TEMP_WATER, RTOS_TIMEOUT_MAX);
-    
-    if(ctrlEvents[CTRL_TEMPER_EVENT_ENABLE_AMB_TEMP])
-        rxDataQueue(&ambTemp, QUEUE_ID_TEMP_AMB_CONFIG, RTOS_TIMEOUT_MAX);
+    rxDataQueue(&tempCtrlTask_->dataSensor, QUEUE_ID_TEMP_CTRL_DATA, RTOS_TIMEOUT_MAX);
 
     /* Copiamos los datos de las Temperaturas */
-    ctrlTemper_setTemperatures(&controlTemp, ambTemp.value, waterTemp.value);
-
-    /* Copiamos el diferencial de Tiempo */
-    ctrlTemper_setDtime(&controlTemp, waterTemp.timeStamp - lastTimeStamp);
-    lastTimeStamp = waterTemp.timeStamp;
+	tempCtrlTask_->ctrlData.ambTemp = tempCtrlTask_->dataSensor.ambTemp;
+    tempCtrlTask_->ctrlData.waterTemp = tempCtrlTask_->dataSensor.waterTemp;
+    tempCtrlTask_->ctrlData.dt_s = tempCtrlTask_->dataSensor.time_s - tempCtrlTask_->lastDataSensor.time_s;
+    
+    tempCtrlTask_->lastDataSensor = tempCtrlTask_->dataSensor;
 
     /* Guardamos en caso de Fallas de los sensores */
-    ctrlEvents[CTRL_TEMPER_EVENT_AMB_TEMP_FAIL] = ambTemp.failure; 
-    ctrlEvents[CTRL_TEMPER_EVENT_WATER_TEMP_FAIL] = waterTemp.failure;
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_AMB_TEMP_FAIL] = (tempCtrlTask_->dataSensor.failures & TRANS_BIT_TEMP_AMB ) == TRANS_BIT_TEMP_AMB;
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_WATER_TEMP_FAIL] = (tempCtrlTask_->dataSensor.failures & TRANS_BIT_TEMP_WATER) == TRANS_BIT_TEMP_WATER;
 }
 
-static void tempCtrl_stateEvents(ctrlTemper_t * ctrlTemper_){
+static void tempCtrl_stateEvents(tempCtrlTask_t* tempCtrlTask_){
+
+    ctrlTemper_t* ctrlTemper_ = &tempCtrlTask_->ctrlTemper;
     /* Borramos las banderas de Eventos */
-    ctrlEvents[CTRL_TEMPER_EVENT_FIRST_SAMPLE] = 0;
-    ctrlEvents[CTRL_TEMPER_EVENT_SAMPLE_UPDATE] = 0;
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_FIRST_SAMPLE] = 0;
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_SAMPLE_UPDATE] = 0;
 
     /* Acciones que se ejecutan en cada estado */
     switch (ctrlTemper_->state){
     case CTRL_TEMPER_STATE_RESET:
         /* Obtenemos nuevos valores de Temperatura */
-        obtainTemperatures();
+        obtainTemperatures(tempCtrlTask_);
         /* Levantamos bandera de Primera Muestra */
-        ctrlEvents[CTRL_TEMPER_EVENT_FIRST_SAMPLE] = 1;
+        tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_FIRST_SAMPLE] = 1;
         break;
 
     case CTRL_TEMPER_STATE_WAIT:
         /* Obtenemos nuevos valores de Temperatura */
-        obtainTemperatures();
+        obtainTemperatures(tempCtrlTask_);
         /* Levantamos bandera de Primera Muestra */
-        ctrlEvents[CTRL_TEMPER_EVENT_SAMPLE_UPDATE] = 1;
+        tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_SAMPLE_UPDATE] = 1;
         break;
 
     case CTRL_TEMPER_STATE_CONTROL:
@@ -157,23 +161,23 @@ static void tempCtrl_stateEvents(ctrlTemper_t * ctrlTemper_){
         sendHaterPower((float) HEATER_POWER_ERROR);
 
         /* Falla del sensor de Temperatura del Agua */
-        if(ctrlEvents[CTRL_TEMPER_EVENT_WATER_TEMP_FAIL]){
+        if(tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_WATER_TEMP_FAIL]){
             /* Esperamos que el sensor este funcionando */
             rtos_waitEvent(SYS_EVENT_GROUP_WATER_TEMP_CHANGE_STATE);
             /* Desactivamos la falla del sensor de Temperatura del Agua */
-            ctrlEvents[CTRL_TEMPER_EVENT_WATER_TEMP_FAIL] = 0;
+            tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_WATER_TEMP_FAIL] = 0;
         }
 
         /* Falla del Calentador */
-        if(ctrlEvents[CTRL_TEMPER_EVENT_HEATER_FAIL]){
+        if(tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_HEATER_FAIL]){
             /* Esperamos que el sensor este funcionando */
             rtos_waitEvent(SYS_EVENT_GROUP_HEATER_CHANGE_STATE);
             /* Desactivamos la falla del sensor de Temperatura del Agua */
-            ctrlEvents[CTRL_TEMPER_EVENT_HEATER_FAIL] = 0;
+            tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_HEATER_FAIL] = 0;
         }
         
         /* Falla de Configuracion */
-        if(ctrlEvents[CTRL_TEMPER_EVENT_CONFIG_FAIL]){
+        if(tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_CONFIG_FAIL]){
             rtos_waitEvent(SYS_EVENT_GROUP_RECONFIG_CONTROL);
         }
         break;
@@ -192,19 +196,19 @@ static void tempCtrl_stateEvents(ctrlTemper_t * ctrlTemper_){
     }
 }
 
-static void detectEvent_powerOn(void){
-    ctrlEvents[CTRL_TEMPER_EVENT_POWER_ON] = rtos_pollEvent(SYS_EVENT_GROUP_POWER_ON);
+static void detectEvent_powerOn(tempCtrlTask_t* tempCtrlTask_){
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_POWER_ON] = rtos_pollEvent(SYS_EVENT_GROUP_POWER_ON);
 }
 
-static void detectEvent_reconfig(void){    
-    ctrlEvents[CTRL_TEMPER_EVENT_RECONFIGURATION] = rtos_pollEvent(SYS_EVENT_GROUP_RECONFIG_CONTROL);
+static void detectEvent_reconfig(tempCtrlTask_t* tempCtrlTask_){
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_RECONFIGURATION] = rtos_pollEvent(SYS_EVENT_GROUP_RECONFIG_CONTROL);
 
-    if(ctrlEvents[CTRL_TEMPER_EVENT_RECONFIGURATION])
+    if(tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_RECONFIGURATION])
         tempAquariumControl_init();
 }
 
-static void detectEvent_heaterFail(void){
-    ctrlEvents[CTRL_TEMPER_EVENT_HEATER_FAIL] = rtos_pollEvent(SYS_EVENT_GROUP_HEATER_CHANGE_STATE);
+static void detectEvent_heaterFail(tempCtrlTask_t* tempCtrlTask_){
+    tempCtrlTask_->ctrlEvents[CTRL_TEMPER_EVENT_HEATER_FAIL] = rtos_pollEvent(SYS_EVENT_GROUP_HEATER_CHANGE_STATE);
 }
 
 static void sendHaterPower(float heaterPower_){
