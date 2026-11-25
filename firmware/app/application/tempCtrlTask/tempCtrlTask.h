@@ -10,13 +10,17 @@
 
 #include "rtos_resources.h"
 #include "ctrlTemper.h"
+#include "PID.h"
 
 
 typedef struct {
 	ctrlTemper_t ctrlTemper;
+	PID_Control temperPID;
+	ctrlTemper_data_t ctrlData;
+	configCtrlTemper_t config;
+
 	dataSensor_CtrlTemper_t dataSensor;
 	dataSensor_CtrlTemper_t lastDataSensor;
-	ctrlTemper_data_t ctrlData;
 	bool ctrlEvents[numEvents];
 } tempCtrlTask_t;
 

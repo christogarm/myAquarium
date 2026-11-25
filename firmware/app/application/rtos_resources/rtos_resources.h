@@ -14,6 +14,7 @@
 #include "event_groups.h"       /* Para Event Groups */
 #include "task.h"               /* Para Task Notifications */
 
+#include "config.h"
 /* Macros */
 #define RTOS_TIMEOUT_MAX        portMAX_DELAY
 #define RTOS_OK                 pdPASS
@@ -103,11 +104,11 @@ typedef struct
 
 typedef struct
 {
-    float rateLimit;
-    float difPowerHeater;
-    float minPowerHeater;
-    float maxPowerHeater;
-    bool flagEnable;
+	float setPoint;
+	float deadband;
+	float kp, ki, kd;
+	float initOutput;
+    config_device_flag_t enableFlags;
 }configCtrlTemper_t;
 
 typedef struct

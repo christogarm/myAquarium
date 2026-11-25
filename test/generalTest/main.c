@@ -15,6 +15,7 @@
 
 /* Includes Control Temperatures */
 #include "tempCtrlTask.h"
+#include "PID.h"
 
 /* Includes Plant */
 #include "plantTask.h"
@@ -70,6 +71,9 @@ char** HeaterSim;
 static heater_status_t heaterSim_init(void* instance_, const void* config_);
 static heater_status_t heaterSim_setOutput(void* instance_, float output_);
 
+    /* Control */
+tempCtrlTask_t tempCtrlTask = { 0 };
+
     /* Plant */
 plantTask_t plantTask = { 0 };
 
@@ -116,6 +120,7 @@ static void initConfig(void);
 static void initAmbientTempSensor(void);
 static void initLogger(void);
 static void initHeater(void);
+static void initControl(void);
 static void initPlant(void);
 static void initDaignostic(void);
 
@@ -132,14 +137,13 @@ int main(void)
     initAmbientTempSensor();
     initLogger();
     initHeater();
+    initControl();
     initPlant();
     initDaignostic();
 
     /* init Tasks */
-    xTaskCreate(vTempControlTask, "TempCtrl", configMINIMAL_STACK_SIZE, NULL,
+    xTaskCreate(vTempControlTask, "TempCtrl", configMINIMAL_STACK_SIZE, &tempCtrlTask,
         tskIDLE_PRIORITY + 4, NULL);
-    //xTaskCreate(vTempTask, "waterTempTask", configMINIMAL_STACK_SIZE, &waterTempSensor,
-        //tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(vTempTask, "ambientTempTask", configMINIMAL_STACK_SIZE, &ambientTempSensor,
         tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(vHeaterTask, "heaterTask", configMINIMAL_STACK_SIZE, &heater,
@@ -270,6 +274,31 @@ static heater_status_t heaterSim_init(void* instance_, const void* config_) {
 static heater_status_t heaterSim_setOutput(void* instance_, float output_) {
     printf("Calentador: %.2f\n", output_);
     return HEATER_STATUS_OK;
+}
+
+static void initControl(void) {
+    tempCtrlTask.temperPID.param.setPoint = configData_RAM.setpoint;
+    tempCtrlTask.temperPID.param.deadband = configData_RAM.deadband;
+    tempCtrlTask.temperPID.param.Kp = configData_RAM.kp;
+    tempCtrlTask.temperPID.param.Ki = configData_RAM.ki;
+    tempCtrlTask.temperPID.param.Kd = configData_RAM.kd;
+    tempCtrlTask.temperPID.param.alpha = 0.8;
+    tempCtrlTask.temperPID.param.minOutput = 0;
+    tempCtrlTask.temperPID.param.maxOutput = 100;
+    tempCtrlTask.temperPID.param.initOutput = configData_RAM.initOutput;
+    tempCtrlTask.temperPID.param.initInput = 0;
+    tempCtrlTask.temperPID.param.clampIntMin = configData_RAM.ki != 0 ? -100 / configData_RAM.ki : -1;
+    tempCtrlTask.temperPID.param.clampIntMax = configData_RAM.ki != 0 ? 100 / configData_RAM.ki : 1;
+
+    tempCtrlTask.ctrlTemper.config.instance = &tempCtrlTask.temperPID;
+    tempCtrlTask.ctrlTemper.config.init_f = PID_Init;
+    tempCtrlTask.ctrlTemper.config.update_f = PID_Update;
+    tempCtrlTask.ctrlTemper.config.isInit_f = PID_IsInit;
+    tempCtrlTask.ctrlTemper.config.reset_f = PID_Reset;
+    tempCtrlTask.ctrlTemper.config.getOutput_f = PID_GetOutput;
+    tempCtrlTask.ctrlTemper.config.maxOutput = 100;
+    tempCtrlTask.ctrlTemper.config.minOutput = 0;
+    tempCtrlTask.ctrlTemper.config.configInstance = &tempCtrlTask.temperPID.param;
 }
 
 static void initPlant(void) {
